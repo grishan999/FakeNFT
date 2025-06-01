@@ -20,6 +20,6 @@ final class TabBarController: UITabBarController {
 
         viewControllers = [catalogController]
 
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemBlue
     }
 }
