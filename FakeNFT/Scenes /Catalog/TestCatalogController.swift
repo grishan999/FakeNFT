@@ -19,6 +19,8 @@ final class TestCatalogViewController: UIViewController {
 
         view.backgroundColor = .systemBackground
 
+        //!!!!test push
+        
         view.addSubview(testNftButton)
         testNftButton.constraintCenters(to: view)
         testNftButton.setTitle(Constants.openNftTitle, for: .normal)
