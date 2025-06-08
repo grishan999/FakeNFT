@@ -5,7 +5,7 @@
 //  Created by Ilya Grishanov on 03.06.2025.
 //
 
-import UIKit  
+import UIKit
 
 final class CatalogViewController: UIViewController {
     private lazy var tableView = UITableView()
@@ -30,13 +30,15 @@ final class CatalogViewController: UIViewController {
     
     private func setupViewModelBindings() {
         viewModel.onCategoriesUpdate = { [weak self] categories in
-            self?.tableView.reloadData()
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
         }
     }
     
     private func setupUI() {
         view.backgroundColor = .systemBackground
-
+        
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
         tableView.delegate = self
@@ -48,7 +50,7 @@ final class CatalogViewController: UIViewController {
         filterButton.setImage(UIImage(named: "SortCatalog"), for: .normal)
         filterButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
         view.addSubview(filterButton)
-
+        
         NSLayoutConstraint.activate([
             filterButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 2),
             filterButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
@@ -62,7 +64,21 @@ final class CatalogViewController: UIViewController {
         ])
     }
     
-    @objc private func filterTapped() {}
+    @objc private func filterTapped() {
+        let alert = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
+        
+        alert.addAction(UIAlertAction(title: "По названию", style: .default) { [weak self] _ in
+            self?.viewModel.sortByName()
+        })
+        
+        alert.addAction(UIAlertAction(title: "По количеству NFT", style: .default) { [weak self] _ in
+            self?.viewModel.sortByCount()
+        })
+        
+        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        
+        present(alert, animated: true)
+    }
 }
 
 extension CatalogViewController: UITableViewDataSource {
@@ -81,5 +97,5 @@ extension CatalogViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         188
     }
-
+    
 }

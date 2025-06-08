@@ -5,10 +5,10 @@
 //  Created by Ilya Grishanov on 03.06.2025.
 //
 
-import Foundation  
+import Foundation
 
 final class CatalogViewModel {
-
+    
     private(set) var categories: [CatalogCategory] = [] {
         didSet { onCategoriesUpdate?(categories) }
     }
@@ -34,11 +34,11 @@ final class CatalogViewModel {
     func loadCategories() {
         isLoading = true
         error = nil
-
+        
         nftClient.fetchCollections { [weak self] result in
             DispatchQueue.main.async {
                 self?.isLoading = false
-
+                
                 switch result {
                 case .success(let collections):
                     self?.categories = collections.compactMap { collection in
@@ -57,5 +57,17 @@ final class CatalogViewModel {
                 }
             }
         }
+    }
+    
+    func sortByName() {
+        categories.sort {
+            $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending
+        }
+        onCategoriesUpdate?(categories)
+    }
+    
+    func sortByCount() {
+        categories.sort { $0.count > $1.count }
+        onCategoriesUpdate?(categories)
     }
 }
