@@ -5,6 +5,12 @@
 //  Created by Ilya Grishanov on 03.06.2025.
 //
 
+enum SortType: String {
+    case byName
+    case byCount
+    case none
+}
+
 import Foundation
 
 final class CatalogViewModel {
@@ -21,6 +27,9 @@ final class CatalogViewModel {
         didSet { onErrorUpdate?(error) }
     }
     
+    private let sortTypeKey = "CatalogSortType"
+    private let userDefaults = UserDefaults.standard
+    
     var onCategoriesUpdate: (([CatalogCategory]) -> Void)?
     var onLoadingUpdate: ((Bool) -> Void)?
     var onErrorUpdate: ((String?) -> Void)?
@@ -29,6 +38,29 @@ final class CatalogViewModel {
     
     init(nftClient: NFTClientProtocol) {
         self.nftClient = nftClient
+    }
+    
+    private var currentSortType: SortType {
+        get {
+            guard let rawValue = userDefaults.string(forKey: sortTypeKey) else {
+                return .none
+            }
+            return SortType(rawValue: rawValue) ?? .none
+        }
+        set {
+            userDefaults.set(newValue.rawValue, forKey: sortTypeKey)
+        }
+    }
+    
+    private func applySavedSort() {
+        switch currentSortType {
+        case .byName:
+            sortByName()
+        case .byCount:
+            sortByCount()
+        case .none:
+            break
+        }
     }
     
     func loadCategories() {
@@ -52,6 +84,7 @@ final class CatalogViewModel {
                             count: collection.nfts.count
                         )
                     }
+                    self?.applySavedSort()
                 case .failure(let error):
                     self?.error = error.localizedDescription
                 }
@@ -63,11 +96,13 @@ final class CatalogViewModel {
         categories.sort {
             $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending
         }
+        currentSortType = .byName
         onCategoriesUpdate?(categories)
     }
     
     func sortByCount() {
         categories.sort { $0.count > $1.count }
         onCategoriesUpdate?(categories)
+        currentSortType = .byCount
     }
 }
