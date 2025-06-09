@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ProgressHUD
 
 final class CatalogViewController: UIViewController {
     private lazy var tableView = UITableView()
@@ -34,6 +35,21 @@ final class CatalogViewController: UIViewController {
                 self?.tableView.reloadData()
             }
         }
+        
+        viewModel.onLoadingUpdate = { isLoading in
+            DispatchQueue.main.async {
+                isLoading ? ProgressHUD.show() : ProgressHUD.dismiss()
+            }
+        }
+        
+        viewModel.onErrorUpdate = { errorMessage in
+            DispatchQueue.main.async {
+                if let message = errorMessage {
+                    ProgressHUD.showError(message, delay: 2.0)
+                }
+            }
+        }
+        
     }
     
     private func setupUI() {
