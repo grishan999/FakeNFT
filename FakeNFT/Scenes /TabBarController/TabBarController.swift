@@ -6,7 +6,7 @@ final class TabBarController: UITabBarController {
             setupViewControllers()
         }
     }
-
+    
     private func setupViewControllers() {
         guard servicesAssembly != nil else { return }
         
@@ -16,12 +16,10 @@ final class TabBarController: UITabBarController {
             tag: 0
         )
         
-        let catalogController = TestCatalogViewController(
-            servicesAssembly: servicesAssembly
-        )
+        let catalogViewModel = servicesAssembly.catalogViewModel()
+        let catalogController = CatalogViewController(viewModel: catalogViewModel)
         catalogController.tabBarItem = catalogTabBarItem
         
         viewControllers = [catalogController]
-        view.backgroundColor = .systemBackground 
     }
 }

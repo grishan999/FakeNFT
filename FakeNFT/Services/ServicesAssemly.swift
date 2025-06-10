@@ -17,4 +17,9 @@ final class ServicesAssembly {
             storage: nftStorage
         )
     }
+    
+    func catalogViewModel() -> CatalogViewModel {
+        let nftClient = NFTClient(networkClient: networkClient)
+        return CatalogViewModel(nftClient: nftClient)
+    }
 }
