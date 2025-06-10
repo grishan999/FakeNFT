@@ -4,10 +4,12 @@ typealias NftCompletion = (Result<Nft, Error>) -> Void
 typealias OrderCompletion = (Result<Order, Error>) -> Void
 typealias nftCartModelCompletion = (Result<nftCartModel, Error>) -> Void
 
+
 protocol NftService {
     func loadNft(id: String, completion: @escaping NftCompletion)
     func loadOrder(id: String, completion: @escaping OrderCompletion)
     func loadNftCartModel(id: String, completion: @escaping nftCartModelCompletion)
+    func changeOrder(nftIds: [String], completion: @escaping OrderCompletion)
 }
 
 final class NftServiceImpl: NftService {
@@ -70,6 +72,24 @@ final class NftServiceImpl: NftService {
             case .success(let nft):
                 //storage?.saveNft(nft)
                 completion(.success(nft))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func changeOrder(nftIds: [String], completion: @escaping OrderCompletion) {
+        let request = ChangeOrderRequest(nftIds: nftIds)  // ✅ Передаем массив
+        
+        networkClient.send(request: request, type: Order.self) { [weak storage] result in
+            switch result {
+            case .success(let order):
+                print("Loaded order: \(order.id) with \(order.nfts.count) NFTs")
+                            print("NFT IDs: \(order.nfts)")
+                
+                order.nfts.forEach{ nftID in
+                }
+                completion(.success(order))
             case .failure(let error):
                 completion(.failure(error))
             }

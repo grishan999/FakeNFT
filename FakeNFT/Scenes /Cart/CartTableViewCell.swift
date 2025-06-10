@@ -4,8 +4,10 @@ import Kingfisher
 final class CartTableViewCell: UITableViewCell {
     static let identifier = "CartTableViewCell"
     
+    
     // MARK: - Callback
-    var onRemove: (() -> Void)?
+    var nftID: String?
+    var onRemove: ((String?) -> Void)?
     
     // MARK: - UI Elements
     private lazy var containerView: UIView = {
@@ -139,20 +141,52 @@ final class CartTableViewCell: UITableViewCell {
     }
     
     // MARK: - Configuration
-    func configure(with nft: nftCartModel) {
-        // ✅ Загружаем изображение с Kingfisher
+    func configure(with cellState: NFTCellState) {
+        
+        nftID = cellState.id
+        
+        switch cellState {
+        case .loading:
+            configureLoadingState()
+        case .loaded(let nft):
+            configureLoadedState(with: nft)
+        case .error(let id, let error):
+            configureErrorState(id: id, error: error)
+        }
+    }
+    
+    // ✅ Состояние загрузки - показываем skeleton
+    private func configureLoadingState() {
+        // Показываем skeleton анимацию
+        showSkeletonAnimation()
+        
+        nameLabel.text = "Загрузка..."
+        priceValueLabel.text = "--- ETH"
+        
+        // Очищаем звезды
+        starsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        
+        // Добавляем skeleton звезды
+        addSkeletonStars()
+    }
+    
+    // ✅ Состояние с данными
+    private func configureLoadedState(with nft: nftCartModel) {
+        // Скрываем skeleton анимацию
+        hideSkeletonAnimation()
+        
+        // Загружаем изображение с Kingfisher
         if let imageURL = nft.imageURL {
             nftImageView.kf.setImage(
                 with: imageURL,
-                placeholder: createPlaceholderImage(), // ✅ Заглушка
+                placeholder: createPlaceholderImage(),
                 options: [
-                    .transition(.fade(0.3)), // ✅ Плавное появление
-                    .cacheOriginalImage,     // ✅ Кешируем оригинал
-                    .processor(DownsamplingImageProcessor(size: CGSize(width: 108, height: 108))) // ✅ Оптимизация
+                    .transition(.fade(0.3)),
+                    .cacheOriginalImage,
+                    .processor(DownsamplingImageProcessor(size: CGSize(width: 108, height: 108)))
                 ]
             )
         } else {
-            // ✅ Если нет URL - показываем заглушку
             nftImageView.image = createPlaceholderImage()
         }
         
@@ -162,7 +196,92 @@ final class CartTableViewCell: UITableViewCell {
         setupStars(rating: nft.rating)
     }
     
-    // ✅ Создание заглушки
+    // ✅ Состояние ошибки
+    private func configureErrorState(id: String, error: Error) {
+        hideSkeletonAnimation()
+        
+        nftImageView.image = createErrorImage()
+        nameLabel.text = "Ошибка загрузки"
+        priceValueLabel.text = "--- ETH"
+        
+        // Очищаем звезды
+        starsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+    }
+    
+    // ✅ Создание skeleton анимации
+    private func showSkeletonAnimation() {
+        nftImageView.backgroundColor = .systemGray5
+        
+        // Добавляем градиент анимацию
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [
+            UIColor.systemGray5.cgColor,
+            UIColor.systemGray4.cgColor,
+            UIColor.systemGray5.cgColor
+        ]
+        gradientLayer.locations = [0, 0.5, 1]
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: 108, height: 108)
+        gradientLayer.cornerRadius = 12
+        
+        nftImageView.layer.addSublayer(gradientLayer)
+        
+        // Анимация движения
+        let animation = CABasicAnimation(keyPath: "locations")
+        animation.fromValue = [-1.0, -0.5, 0.0]
+        animation.toValue = [1.0, 1.5, 2.0]
+        animation.duration = 1.5
+        animation.repeatCount = .infinity
+        
+        gradientLayer.add(animation, forKey: "skeleton")
+        gradientLayer.name = "skeletonLayer"
+    }
+    
+    private func hideSkeletonAnimation() {
+        nftImageView.backgroundColor = .clear
+        
+        // Удаляем skeleton слои
+        nftImageView.layer.sublayers?.removeAll { layer in
+            layer.name == "skeletonLayer"
+        }
+    }
+    
+    private func addSkeletonStars() {
+        for _ in 1...5 {
+            let skeletonStar = UIView()
+            skeletonStar.backgroundColor = .systemGray5
+            skeletonStar.layer.cornerRadius = 6
+            skeletonStar.translatesAutoresizingMaskIntoConstraints = false
+            skeletonStar.widthAnchor.constraint(equalToConstant: 12).isActive = true
+            skeletonStar.heightAnchor.constraint(equalToConstant: 12).isActive = true
+            
+            starsStackView.addArrangedSubview(skeletonStar)
+        }
+    }
+    
+    // ✅ Создание изображения ошибки
+    private func createErrorImage() -> UIImage? {
+        let size = CGSize(width: 108, height: 108)
+        let renderer = UIGraphicsImageRenderer(size: size)
+        
+        return renderer.image { context in
+            // Красный фон ошибки
+            UIColor.systemRed.withAlphaComponent(0.1).setFill()
+            context.fill(CGRect(origin: .zero, size: size))
+            
+            // Иконка ошибки в центре
+            let iconSize: CGFloat = 40
+            let iconRect = CGRect(
+                x: (size.width - iconSize) / 2,
+                y: (size.height - iconSize) / 2,
+                width: iconSize,
+                height: iconSize
+            )
+            
+            if let icon = UIImage(systemName: "exclamationmark.triangle")?.withTintColor(.systemRed, renderingMode: .alwaysOriginal) {
+                icon.draw(in: iconRect)
+            }
+        }
+    }
     private func createPlaceholderImage() -> UIImage? {
         let size = CGSize(width: 108, height: 108)
         let renderer = UIGraphicsImageRenderer(size: size)
@@ -212,18 +331,25 @@ final class CartTableViewCell: UITableViewCell {
     
     // MARK: - Actions
     @objc private func removeButtonTapped() {
-        onRemove?()
+        onRemove?(nftID)
     }
     
     // MARK: - Reuse
     override func prepareForReuse() {
         super.prepareForReuse()
+        
         // ✅ Отменяем загрузку изображения при reuse
         nftImageView.kf.cancelDownloadTask()
+        
+        // ✅ Очищаем skeleton анимации
+        hideSkeletonAnimation()
+        
+        // ✅ Сбрасываем все данные
         nftImageView.image = nil
         nameLabel.text = nil
         priceValueLabel.text = nil
         starsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         onRemove = nil
+        nftID = nil
     }
 }

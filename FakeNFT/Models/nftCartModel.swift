@@ -1,6 +1,7 @@
 import Foundation
 
 struct nftCartModel: Decodable {
+    let id: String
     let images: [String]
     let name: String
     let price: Double
@@ -18,6 +19,7 @@ struct nftCartModel: Decodable {
     }
     
     enum CodingKeys: String, CodingKey {
+        case id
         case images
         case name
         case price

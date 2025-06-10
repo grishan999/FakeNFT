@@ -117,24 +117,70 @@ struct DefaultNetworkClient: NetworkClient {
 
         var urlRequest = URLRequest(url: endpoint)
         urlRequest.httpMethod = request.httpMethod.rawValue
-
         urlRequest.addValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
 
+        // ✅ Логирование основной информации
+        print("🌐 === NETWORK REQUEST DEBUG ===")
+        print("📍 URL: \(endpoint.absoluteString)")
+        print("📋 Method: \(request.httpMethod.rawValue)")
+        print("🔑 Token: \(RequestConstants.token)")
+
+        // ✅ Специальная логика для ChangeOrderRequest
+        if let changeOrderRequest = request as? ChangeOrderRequest {
+            print("🔄 ChangeOrderRequest detected")
+            print("📦 NFT IDs: \(changeOrderRequest.nftIds)")
+            
+            let bodyString = changeOrderRequest.nftIds
+                .map { "nfts=\($0)" }
+                .joined(separator: "&")
+            
+            print("📝 Body string: \(bodyString)")
+            
+            urlRequest.httpBody = bodyString.data(using: .utf8)
+            urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+            
+            // ✅ Логирование заголовков
+            print("🏷️ Headers:")
+            urlRequest.allHTTPHeaderFields?.forEach { key, value in
+                print("   \(key): \(value)")
+            }
+            
+            // ✅ Логирование тела запроса
+            if let bodyData = urlRequest.httpBody,
+               let bodyString = String(data: bodyData, encoding: .utf8) {
+                print("📄 HTTP Body: \(bodyString)")
+            }
+            
+            print("=== END REQUEST DEBUG ===")
+            return urlRequest
+        }
+        
+        // Обычная логика для других запросов
         if let dtoDictionary = request.dto?.asDictionary() {
+            print("📋 Regular request with DTO")
+            print("📦 DTO: \(dtoDictionary)")
+            
             var urlComponents = URLComponents()
             let queryItems = dtoDictionary.map { field in
-                URLQueryItem(
-                    name: field.key,
-                    value: field.value
-                    )
+                URLQueryItem(name: field.key, value: field.value)
             }
             urlComponents.queryItems = queryItems
             urlRequest.httpBody = urlComponents.query?.data(using: .utf8)
-            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+            
+            // ✅ Логирование для обычных запросов
+            print("🏷️ Headers:")
+            urlRequest.allHTTPHeaderFields?.forEach { key, value in
+                print("   \(key): \(value)")
+            }
+            
+            if let bodyData = urlRequest.httpBody,
+               let bodyString = String(data: bodyData, encoding: .utf8) {
+                print("📄 HTTP Body: \(bodyString)")
+            }
         }
 
-        urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-
+        print("=== END REQUEST DEBUG ===")
         return urlRequest
     }
 
@@ -147,3 +193,4 @@ struct DefaultNetworkClient: NetworkClient {
         }
     }
 }
+

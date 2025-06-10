@@ -52,6 +52,9 @@
 		F476BEF32DF62DA700EEA2F3 /* OrderRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BEF22DF62DA700EEA2F3 /* OrderRequest.swift */; };
 		F476BEF52DF631AC00EEA2F3 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BEF42DF631AC00EEA2F3 /* Order.swift */; };
 		F476BEF72DF6FE0A00EEA2F3 /* nftCartRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BEF62DF6FE0A00EEA2F3 /* nftCartRequest.swift */; };
+		F476BEF92DF712CF00EEA2F3 /* NFTCellState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BEF82DF712CF00EEA2F3 /* NFTCellState.swift */; };
+		F476BEFF2DF7545300EEA2F3 /* DeleteConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BEFE2DF7545300EEA2F3 /* DeleteConfirmationViewController.swift */; };
+		F476BF012DF78C5900EEA2F3 /* ChangeOrderRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BF002DF78C5900EEA2F3 /* ChangeOrderRequest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -120,6 +123,9 @@
 		F476BEF22DF62DA700EEA2F3 /* OrderRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderRequest.swift; sourceTree = "<group>"; };
 		F476BEF42DF631AC00EEA2F3 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
 		F476BEF62DF6FE0A00EEA2F3 /* nftCartRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nftCartRequest.swift; sourceTree = "<group>"; };
+		F476BEF82DF712CF00EEA2F3 /* NFTCellState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTCellState.swift; sourceTree = "<group>"; };
+		F476BEFE2DF7545300EEA2F3 /* DeleteConfirmationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteConfirmationViewController.swift; sourceTree = "<group>"; };
+		F476BF002DF78C5900EEA2F3 /* ChangeOrderRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeOrderRequest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -381,7 +387,10 @@
 				F476BE842DF5E9C200EEA2F3 /* CartViewController.swift */,
 				F476BE862DF5F87500EEA2F3 /* CartTableViewCell.swift */,
 				F476BEF22DF62DA700EEA2F3 /* OrderRequest.swift */,
+				F476BF002DF78C5900EEA2F3 /* ChangeOrderRequest.swift */,
 				F476BEF62DF6FE0A00EEA2F3 /* nftCartRequest.swift */,
+				F476BEF82DF712CF00EEA2F3 /* NFTCellState.swift */,
+				F476BEFE2DF7545300EEA2F3 /* DeleteConfirmationViewController.swift */,
 			);
 			path = Cart;
 			sourceTree = "<group>";
@@ -536,6 +545,7 @@
 				F476BE872DF5F87500EEA2F3 /* CartTableViewCell.swift in Sources */,
 				3FC8C39329D246BA0081F015 /* DateFormatters+Presets.swift in Sources */,
 				0CFCB7422A78013E0009A829 /* Nft.swift in Sources */,
+				F476BEFF2DF7545300EEA2F3 /* DeleteConfirmationViewController.swift in Sources */,
 				0CF2C2DD2A783CE600FDC837 /* ErrorView.swift in Sources */,
 				0C79EE682A76DE0900EE90EA /* NftDetailPresenter.swift in Sources */,
 				3F68069B29CBBAF100B4F915 /* ProductDetailsTableViewController.swift in Sources */,
@@ -549,6 +559,7 @@
 				0C79EE6C2A76DE2E00EE90EA /* ServicesAssemly.swift in Sources */,
 				F476BEF52DF631AC00EEA2F3 /* Order.swift in Sources */,
 				0CFCB74E2A7817DC0009A829 /* NftStorage.swift in Sources */,
+				F476BF012DF78C5900EEA2F3 /* ChangeOrderRequest.swift in Sources */,
 				3FC8C39129D2453B0081F015 /* ExamplePutRequest.swift in Sources */,
 				0CFCB7462A78064B0009A829 /* NftDetailCellModel.swift in Sources */,
 				F476BEF72DF6FE0A00EEA2F3 /* nftCartRequest.swift in Sources */,
@@ -560,6 +571,7 @@
 				F476BE822DF5E61200EEA2F3 /* nftCartModel.swift in Sources */,
 				3F6806D329CBBE9600B4F915 /* NetworkRequest.swift in Sources */,
 				0CFCB7492A7808900009A829 /* TestCatalogController.swift in Sources */,
+				F476BEF92DF712CF00EEA2F3 /* NFTCellState.swift in Sources */,
 				3F6806D129CBBE6B00B4F915 /* NetworkClient.swift in Sources */,
 				0CFCB7442A7802440009A829 /* NftDetailInput.swift in Sources */,
 				F476BEF32DF62DA700EEA2F3 /* OrderRequest.swift in Sources */,
