@@ -22,4 +22,8 @@ final class ServicesAssembly {
         let nftClient = NFTClient(networkClient: networkClient)
         return CatalogViewModel(nftClient: nftClient)
     }
+    
+    func nftCollectionViewModel(collectionId: String) -> NFTCollectionViewModelProtocol {
+            NFTCollectionViewModel(collectionId: collectionId, networkClient: networkClient, nftService: nftService)
+        }
 }

@@ -21,7 +21,12 @@ final class CatalogCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    override func prepareForReuse() {
+           super.prepareForReuse()
+        nftImageView.image = nil
+        nameLabel.text = nil
+       }
+    
     func configure(with category: CatalogCategory) {
         nameLabel.text = "\(category.title) (\(category.count))"
         
