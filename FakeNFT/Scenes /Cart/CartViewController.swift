@@ -30,7 +30,7 @@ final class CartViewController: UIViewController {
     //  View хранит только текущее состояние для отображения
     private var currentState: CartViewState = .initial
     
-    // MARK: - UI Elements (все элементы остаются прежними)
+    // MARK: - UI Elements
     
     private lazy var tableView: UITableView = {
         let table = UITableView()
@@ -90,7 +90,6 @@ final class CartViewController: UIViewController {
     
     // MARK: - Init
     
-    //  
     init(servicesAssembly: ServicesAssembly, viewModel: CartViewModelProtocol) {
         self.servicesAssembly = servicesAssembly
         self.viewModel = viewModel
@@ -124,9 +123,19 @@ final class CartViewController: UIViewController {
     
     //  Настраиваем реактивные связи с ViewModel
     private func setupBindings() {
-        //  Подписываемся на изменения состояния
+        //  ПОЛНОЕ ОБНОВЛЕНИЕ: только для skeleton ячеек, удаления
         viewModel.onStateChanged = { [weak self] state in
-            self?.updateState(state)
+            self?.updateStateWithFullReload(state)
+        }
+        
+        //  ТОЧЕЧНОЕ ОБНОВЛЕНИЕ: только для загрузки отдельных NFT
+        viewModel.onStateChangedWithIndex = { [weak self] state, index in
+            self?.updateStateWithCellReload(state, changedIndex: index)
+        }
+    
+        // ОБНОВЛЕНИЕ FOOTER: только footer, никаких reloadData()
+        viewModel.onFooterUpdated = { [weak self] state in
+            self?.updateFooterOnly(state)
         }
         
         //  Подписываемся на ошибки
@@ -142,12 +151,16 @@ final class CartViewController: UIViewController {
     
     // MARK: - State Updates
     
-    private func updateState(_ state: CartViewState) {
-        
+    //  ПОЛНОЕ ОБНОВЛЕНИЕ: reloadData() - вызывается только для skeleton, footer, удаления
+    private func updateStateWithFullReload(_ state: CartViewState) {
+        print("🔄 ПОЛНОЕ обновление: reloadData()")
         
         currentState = state
         
-        //  Простое обновление - всегда перерисовываем таблицу
+        //  ЕДИНСТВЕННЫЕ случаи reloadData():
+        // 1. Создание skeleton ячеек
+        // 2. Завершение загрузки (обновление footer)
+        // 3. Удаление NFT
         tableView.reloadData()
         
         // 🦶 Обновляем footer на основе нового состояния
@@ -155,38 +168,51 @@ final class CartViewController: UIViewController {
         
         //  Скрываем прогресс после получения данных
         ProgressHUD.dismiss()
-        
     }
     
-    private func updateState(_ state: CartViewState, changedIndex: Int? = nil) {
-         
-         currentState = state
-         
-         // 🎯 ОПТИМИЗАЦИЯ: обновляем только изменившуюся ячейку
-         if let changedIndex = changedIndex,
-            changedIndex < state.cellStates.count {
-             
-             print("🎯 Оптимизированное обновление ячейки \(changedIndex)")
-             
-             // Обновляем только конкретную ячейку
-             let indexPath = IndexPath(row: changedIndex, section: 0)
-             
-             // Проверяем что ячейка видна
-             if tableView.indexPathsForVisibleRows?.contains(indexPath) == true {
-                 tableView.reloadRows(at: [indexPath], with: .fade)
-                 print(" Перерисована только ячейка \(changedIndex)")
-             }
-         } else {
-             // Полное обновление таблицы
-             //tableView.reloadData()
-             print("🔄 Полное обновление таблицы")
-         }
-         
-         updateFooter(state)
-         ProgressHUD.dismiss()
-     }
+    // ТОЧЕЧНОЕ ОБНОВЛЕНИЕ: reloadRows() - вызывается для загрузки отдельных NFT
+    private func updateStateWithCellReload(_ state: CartViewState, changedIndex: Int) {
+        print("🎯 ТОЧЕЧНОЕ обновление ячейки \(changedIndex)")
+        
+        currentState = state
+        
+        //  Проверяем валидность индекса
+        guard changedIndex < state.cellStates.count else {
+            print("⚠️ Индекс \(changedIndex) выходит за границы массива (\(state.cellStates.count))")
+            return
+        }
+        
+        //  Обновляем только конкретную ячейку
+        let indexPath = IndexPath(row: changedIndex, section: 0)
+        
+        // Проверяем что ячейка видна на экране
+        if tableView.indexPathsForVisibleRows?.contains(indexPath) == true {
+            tableView.reloadRows(at: [indexPath], with: .none)
+            print(" Перерисована только ячейка \(changedIndex)")
+        } else {
+            print("👻 Ячейка \(changedIndex) не видна, пропускаем обновление")
+            // Ячейка не видна - она обновится автоматически при появлении
+        }
+        
+        // 🦶 Обновляем footer (может измениться при загрузке NFT)
+        updateFooter(state)
+        
+        //  Скрываем прогресс после получения данных
+        ProgressHUD.dismiss()
+    }
     
-
+    //  ОБНОВЛЕНИЕ FOOTER: только footer, никаких reloadData()
+    private func updateFooterOnly(_ state: CartViewState) {
+        print("🦶 ОБНОВЛЕНИЕ только footer")
+        
+        currentState = state
+        
+        // 🦶 Обновляем только footer
+        updateFooter(state)
+        
+        //  Скрываем прогресс после получения данных
+        ProgressHUD.dismiss()
+    }
     
     //  Обновляем footer на основе состояния
     private func updateFooter(_ state: CartViewState) {
@@ -238,7 +264,7 @@ final class CartViewController: UIViewController {
         )
     }
     
-    // MARK: - UI Setup (методы остаются прежними)
+    // MARK: - UI Setup
     
     private func setupProgressHUD() {
         ProgressHUD.animationType = .circleStrokeSpin
@@ -268,9 +294,9 @@ final class CartViewController: UIViewController {
         NSLayoutConstraint.activate([
             menuButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
             menuButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            menuButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16), // отступ слева
+            menuButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
             menuButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
-            containerView.widthAnchor.constraint(equalToConstant: 60), // ширина контейнера
+            containerView.widthAnchor.constraint(equalToConstant: 60),
             containerView.heightAnchor.constraint(equalToConstant: 44)
         ])
         
@@ -333,7 +359,7 @@ final class CartViewController: UIViewController {
         print("Pay button tapped")
     }
     
-    // MARK: - Shimmer Animation (методы остаются прежними)
+    // MARK: - Shimmer Animation
     
     private func showFooterShimmer() {
         view.layoutIfNeeded()
