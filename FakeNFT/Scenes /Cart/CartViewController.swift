@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import ProgressHUD
 
-// ✅ Единая структура состояния - все данные для View в одном месте
+//  Единая структура состояния - все данные для View в одном месте
 struct CartViewState {
     let cellStates: [NFTCellState]
     let doneLoading: Bool
@@ -14,7 +14,7 @@ struct CartViewState {
         let isPayButtonEnabled: Bool
     }
     
-    // ✅ Статический метод для начального состояния
+    //  Статический метод для начального состояния
     static var initial: CartViewState {
         return CartViewState(cellStates: [], doneLoading: false, footerInfo: nil)
     }
@@ -27,7 +27,7 @@ final class CartViewController: UIViewController {
     private let servicesAssembly: ServicesAssembly
     private let viewModel: CartViewModelProtocol
     
-    // ✅ View хранит только текущее состояние для отображения
+    //  View хранит только текущее состояние для отображения
     private var currentState: CartViewState = .initial
     
     // MARK: - UI Elements (все элементы остаются прежними)
@@ -90,12 +90,12 @@ final class CartViewController: UIViewController {
     
     // MARK: - Init
     
-    // ✅ Инжектируем ViewModel через протокол для лучшей тестируемости
+    //  
     init(servicesAssembly: ServicesAssembly, viewModel: CartViewModelProtocol) {
         self.servicesAssembly = servicesAssembly
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        setupBindings() // ✅ Настраиваем связи сразу при создании
+        setupBindings() //  Настраиваем связи сразу при создании
     }
     
     required init?(coder: NSCoder) {
@@ -111,7 +111,7 @@ final class CartViewController: UIViewController {
         setupUI()
         updateFooter(currentState)
         
-        // ✅ Просто сообщаем ViewModel что View готово
+        //  Просто сообщаем ViewModel что View готово
         viewModel.viewDidLoad()
     }
     
@@ -122,19 +122,19 @@ final class CartViewController: UIViewController {
     
     // MARK: - Bindings Setup
     
-    // ✅ Настраиваем реактивные связи с ViewModel
+    //  Настраиваем реактивные связи с ViewModel
     private func setupBindings() {
-        // ✅ Подписываемся на изменения состояния
+        //  Подписываемся на изменения состояния
         viewModel.onStateChanged = { [weak self] state in
             self?.updateState(state)
         }
         
-        // ✅ Подписываемся на ошибки
+        //  Подписываемся на ошибки
         viewModel.onError = { [weak self] message in
             self?.showError(message)
         }
         
-        // ✅ Подписываемся на запросы показа диалога удаления
+        //  Подписываемся на запросы показа диалога удаления
         viewModel.onShowDeleteConfirmation = { [weak self] nftID, imageURL in
             self?.showDeleteConfirmation(nftID: nftID, imageURL: imageURL)
         }
@@ -147,13 +147,13 @@ final class CartViewController: UIViewController {
         
         currentState = state
         
-        // 🔄 Простое обновление - всегда перерисовываем таблицу
+        //  Простое обновление - всегда перерисовываем таблицу
         tableView.reloadData()
         
         // 🦶 Обновляем footer на основе нового состояния
         updateFooter(state)
         
-        // 🫥 Скрываем прогресс после получения данных
+        //  Скрываем прогресс после получения данных
         ProgressHUD.dismiss()
         
     }
@@ -174,7 +174,7 @@ final class CartViewController: UIViewController {
              // Проверяем что ячейка видна
              if tableView.indexPathsForVisibleRows?.contains(indexPath) == true {
                  tableView.reloadRows(at: [indexPath], with: .fade)
-                 print("✅ Перерисована только ячейка \(changedIndex)")
+                 print(" Перерисована только ячейка \(changedIndex)")
              }
          } else {
              // Полное обновление таблицы
@@ -188,16 +188,16 @@ final class CartViewController: UIViewController {
     
 
     
-    // ✅ Обновляем footer на основе состояния
+    //  Обновляем footer на основе состояния
     private func updateFooter(_ state: CartViewState) {
         if state.doneLoading == false {
-            // ✅ Показываем shimmer во время загрузки
+            //  Показываем shimmer во время загрузки
             showFooterShimmer()
             footerActivityIndicator.startAnimating()
             payButton.isEnabled = false
             payButton.alpha = 0.5
         } else if let footerInfo = state.footerInfo {
-            // ✅ Показываем реальные данные
+            //  Показываем реальные данные
             hideFooterShimmer()
             footerActivityIndicator.stopAnimating()
             nftCountLabel.text = "\(footerInfo.count) NFT"
@@ -216,7 +216,7 @@ final class CartViewController: UIViewController {
         present(alert, animated: true)
     }
     
-    // ✅ Показываем диалог подтверждения удаления
+    //  Показываем диалог подтверждения удаления
     private func showDeleteConfirmation(nftID: String, imageURL: URL?) {
         if imageURL == nil {
             showError("Ошибка, попробуйте позже")
@@ -229,7 +229,7 @@ final class CartViewController: UIViewController {
             nftImageURL: imageURL,
             onDelete: { [weak self] confirmedNFTID in
                 print("🎯 Подтверждено удаление NFT: \(confirmedNFTID)")
-                // ✅ Делегируем выполнение удаления ViewModel
+                //  Делегируем выполнение удаления ViewModel
                 self?.viewModel.confirmRemoveItem(nftID: confirmedNFTID)
             },
             onCancel: { cancelledNFTID in
@@ -260,7 +260,7 @@ final class CartViewController: UIViewController {
         menuButton.tintColor = .black
         menuButton.addTarget(self, action: #selector(menuButtonTapped), for: .touchUpInside)
         
-        // ✅ Создаем контейнер с отступами
+        //  Создаем контейнер с отступами
         let containerView = UIView()
         containerView.addSubview(menuButton)
         
@@ -434,7 +434,7 @@ final class CartViewController: UIViewController {
 
 extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // ✅ Используем currentState как единственный источник данных
+        //  Используем currentState как единственный источник данных
         return currentState.cellStates.count
     }
     
@@ -443,11 +443,11 @@ extension CartViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        // ✅ Безопасно получаем состояние ячейки
+        //  Безопасно получаем состояние ячейки
         let cellState = currentState.cellStates[indexPath.row]
         cell.configure(with: cellState)
         
-        // ✅ Передаем действие удаления во ViewModel
+        //  Передаем действие удаления во ViewModel
         cell.onRemove = { [weak self] nftID in
             guard let nftID = nftID else {
                 print("❌ Не удалось получить nftID для удаления")
@@ -455,7 +455,7 @@ extension CartViewController: UITableViewDataSource {
             }
             
             print("🗑️ Запрос удаления NFT: \(nftID)")
-            // ✅ View делегирует решение ViewModel
+            //  View делегирует решение ViewModel
             self?.viewModel.removeItemRequested(nftID: nftID)
         }
         

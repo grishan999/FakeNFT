@@ -1,6 +1,6 @@
 import Foundation
 
-// ✅ Протокол ViewModel - четко определенный интерфейс
+//  Протокол ViewModel - четко определенный интерфейс
 protocol CartViewModelProtocol: AnyObject {
     var onStateChanged: ((CartViewState) -> Void)? { get set }
     var onError: ((String) -> Void)? { get set }
@@ -17,7 +17,7 @@ final class CartViewModel: CartViewModelProtocol {
     
     // MARK: - Bindings (связи с View)
     
-    // ✅ Реактивные связи через closures - View подписывается на изменения
+    //  Реактивные связи через closures - View подписывается на изменения
     var onStateChanged: ((CartViewState) -> Void)?
     var onError: ((String) -> Void)?
     var onShowDeleteConfirmation: ((String, URL?) -> Void)?
@@ -26,12 +26,12 @@ final class CartViewModel: CartViewModelProtocol {
     
     private let servicesAssembly: ServicesAssembly
     
-    // ✅ ЕДИНСТВЕННЫЙ источник правды - состояние только здесь
+    //  состояние только здесь
     private var nftCellStates: [NFTCellState] = []
-
-    // ✅ Флаг загрузки только во ViewModel
+    
+    //  Флаг загрузки только во ViewModel
     private var doneLoading = false
-
+    
     
     // MARK: - Init
     
@@ -47,7 +47,7 @@ final class CartViewModel: CartViewModelProtocol {
     
     // MARK: - Private Methods (внутренняя логика)
     
-    // ✅ Центральный метод обновления состояния
+    //  Центральный метод обновления состояния
     private func updateViewState(changedIndex: Int? = nil) {
         let footerInfo = createFooterInfo()
         
@@ -68,19 +68,13 @@ final class CartViewModel: CartViewModelProtocol {
         }
     }
     
-
-    
     // Обновляем весь массив ячеек
     private func updateAllCellStates(_ newStates: [NFTCellState]) {
         nftCellStates = newStates
         updateViewState()  // ✅ Явно обновляем UI после изменения всего массива
     }
     
-
-    
-    
-    
-    // ✅ Вычисляем информацию для footer на основе текущего состояния
+    //  Вычисляем информацию для footer на основе текущего состояния
     private func createFooterInfo() -> CartViewState.FooterInfo? {
         guard doneLoading == true else { return nil } // делаем футер если загружена дата иначе нил
         
@@ -95,9 +89,9 @@ final class CartViewModel: CartViewModelProtocol {
             isPayButtonEnabled: isPayButtonEnabled
         )
     }
-
-
-    // ✅ Загрузка заказа - начальная точка
+    
+    
+    // Загрузка заказа - начальная точка
     private func loadOrder() {
         servicesAssembly.nftService.loadOrder(id: "1") { [weak self] result in
             DispatchQueue.main.async {
@@ -113,21 +107,21 @@ final class CartViewModel: CartViewModelProtocol {
         }
     }
     
-    // ✅ Создаем skeleton ячейки - промежуточное состояние
+    //  Создаем skeleton ячейки - промежуточное состояние
     private func createSkeletonCells(for nftIDs: [String]) {
         let skeletonStates = nftIDs.map { NFTCellState.loading(id: $0) }
         updateAllCellStates(skeletonStates)  // ✅ Явный вызов обновления
         print("🔄 Created \(nftCellStates.count) skeleton cells")
     }
     
-    // ✅ Загружаем данные для каждой NFT параллельно
+    //  Загружаем данные для каждой NFT параллельно
     private func loadNFTsData(ids: [String]) {
         for (index, id) in ids.enumerated() {
             loadSingleNFT(id: id, at: index)
         }
     }
-
-    // ✅ Загружаем одну NFT и обновляем конкретную ячейку
+    
+    //  Загружаем одну NFT и обновляем конкретную ячейку
     private func loadSingleNFT(id: String, at index: Int) {
         servicesAssembly.nftService.loadNftCartModel(id: id) { [weak self] result in
             DispatchQueue.main.async {
@@ -135,12 +129,12 @@ final class CartViewModel: CartViewModelProtocol {
                 
                 switch result {
                 case .success(let nft):
-                    // ✅ НОВЫЙ ПОДХОД: обновляем конкретную ячейку
+                    //  обновляем конкретную ячейку
                     self.updateCellState(at: index, to: .loaded(nft: nft))
                     print("✅ Loaded NFT at index \(index): \(nft.name)")
                     
                 case .failure(let error):
-                    // ✅ НОВЫЙ ПОДХОД: обновляем конкретную ячейку
+                    // конкретную ячейку
                     self.updateCellState(at: index, to: .error(id: id, error: error))
                     print("❌ Failed to load NFT at index \(index): \(error)")
                 }
@@ -155,17 +149,17 @@ final class CartViewModel: CartViewModelProtocol {
         guard index < nftCellStates.count else { return }
         
         nftCellStates[index] = newState
-        updateViewState(changedIndex: index)  // ✅ Явно указываем какая ячейка изменилась
+        updateViewState(changedIndex: index)  // Явно указываем какая ячейка изменилась
     }
     
-    // ✅ Проверяем все ли NFT загружены
+    //  Проверяем все ли NFT загружены
     private func checkIfAllNFTsLoaded() {
         let loadedCount = nftCellStates.filter { $0.isLoading == false }.count
         let totalCount = nftCellStates.count
         
         if loadedCount == totalCount && totalCount > 0 {
             doneLoading = true
-            updateViewState()  // ✅ Явно обновляем UI после изменения флага
+            updateViewState()  //  Явно обновляем UI после изменения флага
             print("🎉 All NFTs loaded!")
         }
     }
@@ -173,24 +167,24 @@ final class CartViewModel: CartViewModelProtocol {
     // Обновляем флаг загрузки
     private func updateLoadingState(_ isLoading: Bool) {
         doneLoading = !isLoading
-        updateViewState()  // ✅ Явно обновляем UI после изменения флага
+        updateViewState()  //  Явно обновляем UI после изменения флага
     }
     
     
     // MARK: - Удаление nft
     
-    // ✅ View сообщает о намерении удалить, ViewModel решает что делать
+    //  View сообщает о намерении удалить, ViewModel решает что делать
     func removeItemRequested(nftID: String) {
         let imageURL = getNFTImageURL(for: nftID)
         onShowDeleteConfirmation?(nftID, imageURL)
     }
     
-    // ✅ View подтверждает удаление, ViewModel выполняет бизнес-логику
+    //  View подтверждает удаление, ViewModel выполняет бизнес-логику
     func confirmRemoveItem(nftID: String) {
         removeItemByID(nftID: nftID)
     }
-  
-    // ✅ Бизнес-логика удаления NFT
+    
+    //  Бизнес-логика удаления NFT
     private func removeItemByID(nftID: String) {
         let currentNftIds = nftCellStates.map { $0.id }
         let filteredNftIds = currentNftIds.filter { $0 != nftID }
@@ -199,13 +193,13 @@ final class CartViewModel: CartViewModelProtocol {
         print("📋 Было NFT: \(currentNftIds)")
         print("📋 Стало NFT: \(filteredNftIds)")
         
-        // ✅ Отправляем запрос на сервер
+        //  Отправляем запрос на сервер
         servicesAssembly.nftService.changeOrder(nftIds: filteredNftIds) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success:
                     print("✅ NFT \(nftID) успешно удален с сервера")
-                    // ✅ Обновляем локальное состояние после успешного ответа сервера
+                    //  Обновляем локальное состояние после успешного ответа сервера
                     self?.removeItemFromState(nftID: nftID)
                     
                 case .failure(let error):
@@ -216,15 +210,15 @@ final class CartViewModel: CartViewModelProtocol {
         }
     }
     
-    // ✅ Удаляем элемент из локального состояния
+    //  Удаляем элемент из локального состояния
     private func removeItemFromState(nftID: String) {
         nftCellStates.removeAll { $0.id == nftID }
         updateViewState()
-        print("✅ NFT удален из корзины")
+        print(" NFT удален из корзины")
         
     }
     
-    // ✅ Получаем URL изображения для конкретной NFT
+    //  Получаем URL изображения для конкретной NFT
     private func getNFTImageURL(for nftID: String) -> URL? {
         guard let cellState = nftCellStates.first(where: { $0.id == nftID }) else {
             return nil
