@@ -186,16 +186,7 @@ final class CartViewController: UIViewController {
          ProgressHUD.dismiss()
      }
     
-    // ✅ Обновляем только изменившиеся ячейки (оптимизация)
-    private func updateChangedCells(oldState: CartViewState, newState: CartViewState) {
-        // ✅ Простая реализация - полное обновление. Можно оптимизировать
-        tableView.reloadData()
-        
-        // TODO: Можно добавить логику для обновления только конкретных ячеек:
-        // - Сравнивать состояния ячеек
-        // - Обновлять только IndexPath с изменениями
-        // - Использовать tableView.reloadRows(at:, with:)
-    }
+
     
     // ✅ Обновляем footer на основе состояния
     private func updateFooter(_ state: CartViewState) {
