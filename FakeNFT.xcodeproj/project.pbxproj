@@ -55,6 +55,7 @@
 		F476BEF92DF712CF00EEA2F3 /* NFTCellState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BEF82DF712CF00EEA2F3 /* NFTCellState.swift */; };
 		F476BEFF2DF7545300EEA2F3 /* DeleteConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BEFE2DF7545300EEA2F3 /* DeleteConfirmationViewController.swift */; };
 		F476BF012DF78C5900EEA2F3 /* ChangeOrderRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BF002DF78C5900EEA2F3 /* ChangeOrderRequest.swift */; };
+		F476BF032DF861F400EEA2F3 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BF022DF861DF00EEA2F3 /* ViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -126,6 +127,7 @@
 		F476BEF82DF712CF00EEA2F3 /* NFTCellState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTCellState.swift; sourceTree = "<group>"; };
 		F476BEFE2DF7545300EEA2F3 /* DeleteConfirmationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteConfirmationViewController.swift; sourceTree = "<group>"; };
 		F476BF002DF78C5900EEA2F3 /* ChangeOrderRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeOrderRequest.swift; sourceTree = "<group>"; };
+		F476BF022DF861DF00EEA2F3 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -384,15 +386,32 @@
 		F476BE832DF5E9AB00EEA2F3 /* Cart */ = {
 			isa = PBXGroup;
 			children = (
+				F476BF052DF8645000EEA2F3 /* NetworkRequests */,
+				F476BF042DF8643000EEA2F3 /* Cell */,
+				F476BF022DF861DF00EEA2F3 /* ViewModel.swift */,
 				F476BE842DF5E9C200EEA2F3 /* CartViewController.swift */,
-				F476BE862DF5F87500EEA2F3 /* CartTableViewCell.swift */,
-				F476BEF22DF62DA700EEA2F3 /* OrderRequest.swift */,
-				F476BF002DF78C5900EEA2F3 /* ChangeOrderRequest.swift */,
-				F476BEF62DF6FE0A00EEA2F3 /* nftCartRequest.swift */,
 				F476BEF82DF712CF00EEA2F3 /* NFTCellState.swift */,
 				F476BEFE2DF7545300EEA2F3 /* DeleteConfirmationViewController.swift */,
 			);
 			path = Cart;
+			sourceTree = "<group>";
+		};
+		F476BF042DF8643000EEA2F3 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				F476BE862DF5F87500EEA2F3 /* CartTableViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		F476BF052DF8645000EEA2F3 /* NetworkRequests */ = {
+			isa = PBXGroup;
+			children = (
+				F476BEF22DF62DA700EEA2F3 /* OrderRequest.swift */,
+				F476BF002DF78C5900EEA2F3 /* ChangeOrderRequest.swift */,
+				F476BEF62DF6FE0A00EEA2F3 /* nftCartRequest.swift */,
+			);
+			path = NetworkRequests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -575,6 +594,7 @@
 				3F6806D129CBBE6B00B4F915 /* NetworkClient.swift in Sources */,
 				0CFCB7442A7802440009A829 /* NftDetailInput.swift in Sources */,
 				F476BEF32DF62DA700EEA2F3 /* OrderRequest.swift in Sources */,
+				F476BF032DF861F400EEA2F3 /* ViewModel.swift in Sources */,
 				0C79EE632A76DD1900EE90EA /* RequestConstants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

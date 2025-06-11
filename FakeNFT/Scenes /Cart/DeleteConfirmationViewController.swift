@@ -79,7 +79,6 @@ class DeleteConfirmationViewController: UIViewController {
     
     private func setupBlurBackground() {
         // 🌀 Создаем blur эффект
-        let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
         backgroundBlurView.effect = nil // Начинаем без эффекта для анимации
         backgroundBlurView.alpha = 0
         
@@ -93,12 +92,6 @@ class DeleteConfirmationViewController: UIViewController {
         nftImageView.clipsToBounds = true
         nftImageView.layer.cornerRadius = 12
         nftImageView.backgroundColor = .systemGray6
-        
-        // Тень для NFT изображения
-        nftImageView.layer.shadowColor = UIColor.black.cgColor
-        nftImageView.layer.shadowOpacity = 0.3
-        nftImageView.layer.shadowOffset = CGSize(width: 0, height: 8)
-        nftImageView.layer.shadowRadius = 16
         
         // Загружаем изображение NFT или показываем placeholder
         if let imageURL = nftImageURL {
@@ -121,18 +114,12 @@ class DeleteConfirmationViewController: UIViewController {
     
     private func setupTitleLabel() {
         titleLabel.text = "Вы уверены что хотите\nудалить товар из корзины?"
-        titleLabel.font = .systemFont(ofSize: 20, weight: .medium)
+        titleLabel.font = .systemFont(ofSize: 13, weight: .medium)
         titleLabel.textAlignment = .center
-        titleLabel.textColor = .white
+        titleLabel.textColor = .black
         titleLabel.numberOfLines = 0
         titleLabel.lineBreakMode = .byWordWrapping
-        
-        // Тень для текста
-        titleLabel.layer.shadowColor = UIColor.black.cgColor
-        titleLabel.layer.shadowOpacity = 0.8
-        titleLabel.layer.shadowOffset = CGSize(width: 0, height: 2)
-        titleLabel.layer.shadowRadius = 4
-        
+                
         // Начальная анимация
         titleLabel.transform = CGAffineTransform(translationX: 0, y: 20)
         titleLabel.alpha = 0
@@ -147,7 +134,7 @@ class DeleteConfirmationViewController: UIViewController {
     private func setupDeleteButton() {
         deleteButton.setTitle("Удалить", for: .normal)
         deleteButton.backgroundColor = .black
-        deleteButton.setTitleColor(.white, for: .normal)
+        deleteButton.setTitleColor(.red, for: .normal)
         deleteButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .medium)
         deleteButton.layer.cornerRadius = 12
         
@@ -231,16 +218,16 @@ class DeleteConfirmationViewController: UIViewController {
             // NFT изображение по центру экрана
             nftImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             nftImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -60),
-            nftImageView.widthAnchor.constraint(equalToConstant: 200),
-            nftImageView.heightAnchor.constraint(equalToConstant: 200),
+            nftImageView.widthAnchor.constraint(equalToConstant: 108),
+            nftImageView.heightAnchor.constraint(equalToConstant: 108),
             
             // Текст под изображением
-            titleLabel.topAnchor.constraint(equalTo: nftImageView.bottomAnchor, constant: 32),
+            titleLabel.topAnchor.constraint(equalTo: nftImageView.bottomAnchor, constant: 12),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
             titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
             
             // Контейнер кнопок под текстом
-            buttonsContainerView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 32),
+            buttonsContainerView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
             buttonsContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             buttonsContainerView.heightAnchor.constraint(equalToConstant: 44),
             buttonsContainerView.widthAnchor.constraint(equalToConstant: 262), // 127 + 8 + 127
@@ -326,7 +313,7 @@ class DeleteConfirmationViewController: UIViewController {
         
         // Добавляем blur эффект с анимацией
         UIView.animate(withDuration: 0.4, delay: 0.1) {
-            self.backgroundBlurView.effect = UIBlurEffect(style: .systemUltraThinMaterialDark)
+            self.backgroundBlurView.effect = UIBlurEffect(style: .systemUltraThinMaterialLight)
         }
         
         // Анимация NFT изображения (масштаб)

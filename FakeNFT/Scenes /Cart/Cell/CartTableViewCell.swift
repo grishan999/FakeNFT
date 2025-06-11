@@ -350,6 +350,6 @@ final class CartTableViewCell: UITableViewCell {
         priceValueLabel.text = nil
         starsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         onRemove = nil
-        nftID = nil
+        
     }
 }
