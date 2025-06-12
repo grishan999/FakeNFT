@@ -132,7 +132,7 @@ final class CartViewController: UIViewController {
         viewModel.onStateChangedWithIndex = { [weak self] state, index in
             self?.updateStateWithCellReload(state, changedIndex: index)
         }
-    
+        
         // ОБНОВЛЕНИЕ FOOTER: только footer, никаких reloadData()
         viewModel.onFooterUpdated = { [weak self] state in
             self?.updateFooterOnly(state)
@@ -153,7 +153,7 @@ final class CartViewController: UIViewController {
     
     //  ПОЛНОЕ ОБНОВЛЕНИЕ: reloadData() - вызывается только для skeleton, footer, удаления
     private func updateStateWithFullReload(_ state: CartViewState) {
-        print("🔄 ПОЛНОЕ обновление: reloadData()")
+        print(" ПОЛНОЕ обновление: reloadData()")
         
         currentState = state
         
@@ -172,13 +172,13 @@ final class CartViewController: UIViewController {
     
     // ТОЧЕЧНОЕ ОБНОВЛЕНИЕ: reloadRows() - вызывается для загрузки отдельных NFT
     private func updateStateWithCellReload(_ state: CartViewState, changedIndex: Int) {
-        print("🎯 ТОЧЕЧНОЕ обновление ячейки \(changedIndex)")
+        print(" ТОЧЕЧНОЕ обновление ячейки \(changedIndex)")
         
         currentState = state
         
         //  Проверяем валидность индекса
         guard changedIndex < state.cellStates.count else {
-            print("⚠️ Индекс \(changedIndex) выходит за границы массива (\(state.cellStates.count))")
+            print(" Индекс \(changedIndex) выходит за границы массива (\(state.cellStates.count))")
             return
         }
         
@@ -292,12 +292,12 @@ final class CartViewController: UIViewController {
         
         menuButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            menuButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
+            menuButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 5),
             menuButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             menuButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
-            menuButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
-            containerView.widthAnchor.constraint(equalToConstant: 60),
-            containerView.heightAnchor.constraint(equalToConstant: 44)
+            menuButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -5),
+            containerView.widthAnchor.constraint(equalToConstant: 42),
+            containerView.heightAnchor.constraint(equalToConstant: 42)
         ])
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: containerView)
@@ -343,6 +343,7 @@ final class CartViewController: UIViewController {
             payButton.centerYAnchor.constraint(equalTo: footerView.centerYAnchor),
             payButton.bottomAnchor.constraint(equalTo: footerView.bottomAnchor, constant: -16),
             payButton.widthAnchor.constraint(equalToConstant: 240),
+            payButton.heightAnchor.constraint(equalToConstant: 44),
             
             footerActivityIndicator.centerXAnchor.constraint(equalTo: nftCountLabel.centerXAnchor),
             footerActivityIndicator.centerYAnchor.constraint(equalTo: footerView.centerYAnchor),
@@ -476,7 +477,7 @@ extension CartViewController: UITableViewDataSource {
         //  Передаем действие удаления во ViewModel
         cell.onRemove = { [weak self] nftID in
             guard let nftID = nftID else {
-                print("❌ Не удалось получить nftID для удаления")
+                print(" Не удалось получить nftID для удаления")
                 return
             }
             

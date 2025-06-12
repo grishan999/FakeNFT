@@ -140,7 +140,7 @@ final class CartViewModel: CartViewModelProtocol {
                 case .failure(let error):
                     // ТОЧЕЧНОЕ обновление конкретной ячейки
                     self.updateCellState(at: index, to: .error(id: id, error: error))
-                    print("❌ Failed to load NFT at index \(index): \(error)")
+                    print(" Failed to load NFT at index \(index): \(error)")
                 }
                 
                 self.checkIfAllNFTsLoaded()
@@ -218,7 +218,7 @@ final class CartViewModel: CartViewModelProtocol {
                     self?.removeItemFromState(nftID: nftID)
                     
                 case .failure(let error):
-                    print("❌ Ошибка удаления NFT \(nftID): \(error)")
+                    print(" Ошибка удаления NFT \(nftID): \(error)")
                     self?.onError?("Ошибка удаления товара: \(error.localizedDescription)")
                 }
             }

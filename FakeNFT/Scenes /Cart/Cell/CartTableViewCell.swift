@@ -100,10 +100,10 @@ final class CartTableViewCell: UITableViewCell {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             // Container view
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             
             // NFT Image
             nftImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
@@ -112,7 +112,7 @@ final class CartTableViewCell: UITableViewCell {
             nftImageView.heightAnchor.constraint(equalToConstant: 108),
             
             // Name label
-            nameLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 12),
+            nameLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 8),
             nameLabel.leadingAnchor.constraint(equalTo: nftImageView.trailingAnchor, constant: 20),
             nameLabel.trailingAnchor.constraint(equalTo: removeButton.leadingAnchor, constant: -8),
             nameLabel.heightAnchor.constraint(equalToConstant: 22),
@@ -129,7 +129,7 @@ final class CartTableViewCell: UITableViewCell {
             // Price value label
             priceValueLabel.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 2),
             priceValueLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-            priceValueLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -12),
+            priceValueLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8),
             
             // Remove button
             removeButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 8),

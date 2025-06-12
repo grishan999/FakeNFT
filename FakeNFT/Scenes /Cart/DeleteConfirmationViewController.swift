@@ -8,7 +8,7 @@ class DeleteConfirmationViewController: UIViewController {
     private let nftID: String
     private let nftImageURL: URL?
     
-    // ✅ Замыкания для обратной связи с CartViewController
+    // Замыкания для обратной связи с CartViewController
     var onDeleteConfirmed: ((String) -> Void)?
     var onCancel: ((String) -> Void)?
     
@@ -53,22 +53,22 @@ class DeleteConfirmationViewController: UIViewController {
         
         setupBlurBackground()
         
-        // 🖼️ NFT изображение по центру
+        //  NFT изображение по центру
         setupNFTImageView()
         
-        // 📝 Текст подтверждения
+        //  Текст подтверждения
         setupTitleLabel()
         
         // 📦 Контейнер для кнопок
         setupButtonsContainer()
         
-        // 🔴 Кнопка "Удалить" (черная)
+        //  Кнопка "Удалить" (черная)
         setupDeleteButton()
         
-        // ⚪ Кнопка "Вернуться" (черная)
+        //  Кнопка "Вернуться" (черная)
         setupCancelButton()
         
-        // 📐 Добавляем элементы в иерархию
+        //  Добавляем элементы в иерархию
         view.addSubview(backgroundBlurView)
         view.addSubview(nftImageView)
         view.addSubview(titleLabel)
@@ -81,10 +81,6 @@ class DeleteConfirmationViewController: UIViewController {
         // 🌀 Создаем blur эффект
         backgroundBlurView.effect = nil // Начинаем без эффекта для анимации
         backgroundBlurView.alpha = 0
-        
-        // Альтернативный способ - если нужен кастомный blur
-        // let blurEffect = UIBlurEffect(style: .dark)
-        // backgroundBlurView.alpha = 0.4 // 40% прозрачности
     }
     
     private func setupNFTImageView() {
@@ -119,7 +115,7 @@ class DeleteConfirmationViewController: UIViewController {
         titleLabel.textColor = .black
         titleLabel.numberOfLines = 0
         titleLabel.lineBreakMode = .byWordWrapping
-                
+        
         // Начальная анимация
         titleLabel.transform = CGAffineTransform(translationX: 0, y: 20)
         titleLabel.alpha = 0
@@ -258,19 +254,19 @@ class DeleteConfirmationViewController: UIViewController {
     }
     
     @objc private func deleteButtonTapped() {
-        print("✅ Пользователь подтвердил удаление NFT: \(nftID)")
+        print(" Пользователь подтвердил удаление NFT: \(nftID)")
         
         animateDisappearance {
-            // ✅ Уведомляем CartViewController о подтверждении удаления с ID
+            //  Уведомляем CartViewController о подтверждении удаления с ID
             self.onDeleteConfirmed?(self.nftID)
         }
     }
     
     @objc private func cancelButtonTapped() {
-        print("❌ Пользователь отменил удаление NFT: \(nftID)")
+        print(" Пользователь отменил удаление NFT: \(nftID)")
         
         animateDisappearance {
-            // ✅ Уведомляем CartViewController об отмене с ID
+            //  Уведомляем CartViewController об отмене с ID
             self.onCancel?(self.nftID)
         }
     }
@@ -372,12 +368,12 @@ class DeleteConfirmationViewController: UIViewController {
 // MARK: - Presentation Helper
 extension DeleteConfirmationViewController {
     
-    // ✅ Статический метод для удобного показа
+    //  Статический метод для удобного показа
     static func present(from viewController: UIViewController,
-                       nftID: String,
-                       nftImageURL: URL? = nil,
-                       onDelete: @escaping (String) -> Void,
-                       onCancel: ((String) -> Void)? = nil) {
+                        nftID: String,
+                        nftImageURL: URL? = nil,
+                        onDelete: @escaping (String) -> Void,
+                        onCancel: ((String) -> Void)? = nil) {
         
         let deleteVC = DeleteConfirmationViewController(nftID: nftID, nftImageURL: nftImageURL)
         deleteVC.modalPresentationStyle = .overCurrentContext
