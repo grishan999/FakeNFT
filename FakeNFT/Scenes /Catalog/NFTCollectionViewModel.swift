@@ -12,7 +12,7 @@ protocol NFTCollectionViewModelProtocol {
     var onNFTsUpdate: (() -> Void)? { get set }
     var onLoadingStateChange: ((Bool) -> Void)? { get set }
     var onError: ((String) -> Void)? { get set }
-    
+    var collection: NFTCollection? { get }
     func loadNFTs()
 }
 
@@ -20,7 +20,7 @@ final class NFTCollectionViewModel: NFTCollectionViewModelProtocol {
     var onNFTsUpdate: (() -> Void)?
     var onLoadingStateChange: ((Bool) -> Void)?
     var onError: ((String) -> Void)?
-
+    private(set) var collection: NFTCollection?
     private(set) var nfts: [Nft] = [] {
         didSet { onNFTsUpdate?() }
     }
@@ -35,13 +35,14 @@ final class NFTCollectionViewModel: NFTCollectionViewModelProtocol {
         self.networkClient = networkClient
         self.nftService = nftService
     }
-
+    
     func loadNFTs() {
         onLoadingStateChange?(true)
         fetchCollection { [weak self] result in
             switch result {
             case .success(let collection):
                 self?.loadFullNFTs(from: collection.nfts)
+                self?.collection = collection
             case .failure(let error):
                 self?.onError?(error.localizedDescription)
                 self?.onLoadingStateChange?(false)
@@ -85,8 +86,8 @@ final class NFTCollectionViewModel: NFTCollectionViewModelProtocol {
                 switch result {
                 case .success(let nft):
                     loadedNFTs.append(nft)
-                case .failure(_):
-                    print("Ошибка загрузки NFT с ID $id): $error.localizedDescription)")
+                case .failure:
+                    break
                 }
                 self.dispatchGroup.leave()
             }
