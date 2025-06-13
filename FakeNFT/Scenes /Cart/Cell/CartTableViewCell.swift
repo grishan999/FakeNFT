@@ -155,7 +155,7 @@ final class CartTableViewCell: UITableViewCell {
         }
     }
     
-    // ✅ Состояние загрузки - показываем skeleton
+    //  Состояние загрузки - показываем skeleton
     private func configureLoadingState() {
         // Показываем skeleton анимацию
         showSkeletonAnimation()
@@ -170,7 +170,7 @@ final class CartTableViewCell: UITableViewCell {
         addSkeletonStars()
     }
     
-    // ✅ Состояние с данными
+    //  Состояние с данными
     private func configureLoadedState(with nft: nftCartModel) {
         // Скрываем skeleton анимацию
         hideSkeletonAnimation()
@@ -196,7 +196,7 @@ final class CartTableViewCell: UITableViewCell {
         setupStars(rating: nft.rating)
     }
     
-    // ✅ Состояние ошибки
+    // Состояние ошибки
     private func configureErrorState(id: String, error: Error) {
         hideSkeletonAnimation()
         
@@ -208,7 +208,7 @@ final class CartTableViewCell: UITableViewCell {
         starsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
     }
     
-    // ✅ Создание skeleton анимации
+    //  Создание skeleton анимации
     private func showSkeletonAnimation() {
         nftImageView.backgroundColor = .systemGray5
         
@@ -258,7 +258,7 @@ final class CartTableViewCell: UITableViewCell {
         }
     }
     
-    // ✅ Создание изображения ошибки
+    //  Создание изображения ошибки
     private func createErrorImage() -> UIImage? {
         let size = CGSize(width: 108, height: 108)
         let renderer = UIGraphicsImageRenderer(size: size)
@@ -317,13 +317,15 @@ final class CartTableViewCell: UITableViewCell {
             starImageView.widthAnchor.constraint(equalToConstant: 12).isActive = true
             starImageView.heightAnchor.constraint(equalToConstant: 12).isActive = true
             
-            if i <= rating {
-                starImageView.image = UIImage(systemName: "star.fill")
-                starImageView.tintColor = .systemYellow
-            } else {
-                starImageView.image = UIImage(named: "star_empty")
-                starImageView.tintColor = .systemGray3
-            }
+            let isStarFilled = i <= rating
+            
+            
+            starImageView.image = isStarFilled ?
+                UIImage(systemName: "star.fill") :
+                UIImage(named: "star_empty")
+            
+            
+            starImageView.tintColor = isStarFilled ? .systemYellow : .systemGray3
             
             starsStackView.addArrangedSubview(starImageView)
         }
@@ -338,13 +340,13 @@ final class CartTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        // ✅ Отменяем загрузку изображения при reuse
+        //  Отменяем загрузку изображения при reuse
         nftImageView.kf.cancelDownloadTask()
         
-        // ✅ Очищаем skeleton анимации
+        //  Очищаем skeleton анимации
         hideSkeletonAnimation()
         
-        // ✅ Сбрасываем все данные
+        //  Сбрасываем все данные
         nftImageView.image = nil
         nameLabel.text = nil
         priceValueLabel.text = nil
