@@ -321,7 +321,7 @@ final class CartTableViewCell: UITableViewCell {
                 starImageView.image = UIImage(systemName: "star.fill")
                 starImageView.tintColor = .systemYellow
             } else {
-                starImageView.image = UIImage(systemName: "star")
+                starImageView.image = UIImage(named: "star_empty")
                 starImageView.tintColor = .systemGray3
             }
             

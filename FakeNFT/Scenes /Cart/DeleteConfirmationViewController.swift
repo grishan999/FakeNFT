@@ -33,6 +33,7 @@ class DeleteConfirmationViewController: UIViewController {
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         setupUI()
         setupConstraints()
@@ -110,7 +111,7 @@ class DeleteConfirmationViewController: UIViewController {
     
     private func setupTitleLabel() {
         titleLabel.text = "Вы уверены что хотите\nудалить товар из корзины?"
-        titleLabel.font = .systemFont(ofSize: 13, weight: .medium)
+        titleLabel.font = .systemFont(ofSize: 13, weight: .regular)
         titleLabel.textAlignment = .center
         titleLabel.textColor = .black
         titleLabel.numberOfLines = 0
@@ -130,16 +131,10 @@ class DeleteConfirmationViewController: UIViewController {
     private func setupDeleteButton() {
         deleteButton.setTitle("Удалить", for: .normal)
         deleteButton.backgroundColor = .black
-        deleteButton.setTitleColor(.red, for: .normal)
+        deleteButton.setTitleColor(UIColor(named: "YP Red"), for: .normal)
         deleteButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .medium)
         deleteButton.layer.cornerRadius = 12
-        
-        // Тень для кнопки
-        deleteButton.layer.shadowColor = UIColor.black.cgColor
-        deleteButton.layer.shadowOpacity = 0.4
-        deleteButton.layer.shadowOffset = CGSize(width: 0, height: 4)
-        deleteButton.layer.shadowRadius = 8
-        
+                
         // Эффект нажатия
         deleteButton.addTarget(self, action: #selector(deleteButtonTouchDown), for: .touchDown)
         deleteButton.addTarget(self, action: #selector(deleteButtonTouchUp), for: [.touchUpInside, .touchUpOutside, .touchCancel])
@@ -151,12 +146,6 @@ class DeleteConfirmationViewController: UIViewController {
         cancelButton.setTitleColor(.white, for: .normal)
         cancelButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .medium)
         cancelButton.layer.cornerRadius = 12
-        
-        // Тень для кнопки
-        cancelButton.layer.shadowColor = UIColor.black.cgColor
-        cancelButton.layer.shadowOpacity = 0.4
-        cancelButton.layer.shadowOffset = CGSize(width: 0, height: 4)
-        cancelButton.layer.shadowRadius = 8
         
         // Эффект нажатия
         cancelButton.addTarget(self, action: #selector(cancelButtonTouchDown), for: .touchDown)
@@ -376,7 +365,7 @@ extension DeleteConfirmationViewController {
                         onCancel: ((String) -> Void)? = nil) {
         
         let deleteVC = DeleteConfirmationViewController(nftID: nftID, nftImageURL: nftImageURL)
-        deleteVC.modalPresentationStyle = .overCurrentContext
+        deleteVC.modalPresentationStyle = .overFullScreen
         deleteVC.modalTransitionStyle = .crossDissolve
         
         deleteVC.onDeleteConfirmed = onDelete
