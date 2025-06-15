@@ -34,7 +34,7 @@ struct LikeDTO: Dto {
 }
 
 struct CartRequest: NetworkRequest {
-    let nftId: String
+    let nfts: [String]
     let isInCart: Bool
     
     var endpoint: URL? {
@@ -46,16 +46,17 @@ struct CartRequest: NetworkRequest {
     }
     
     var dto: Dto? {
-        return CartDTO(nftId: nftId, isInCart: isInCart)
+        return CartDTO(nfts: nfts, isInCart: isInCart)
     }
 }
 
 struct CartDTO: Dto {
-    let nftId: String
+    let nfts: [String]
     let isInCart: Bool
     
     func asDictionary() -> [String: String] {
-        return ["nfts": nftId, "isInCart": isInCart ? "true" : "false"]
+        let nftsString = nfts.joined(separator: ",")
+        return ["nfts": nftsString, "isInCart": isInCart ? "true" : "false"]
     }
 }
 

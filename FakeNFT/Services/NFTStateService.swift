@@ -86,20 +86,38 @@ final class NFTStateService: NFTStateServiceProtocol {
     }
     
     func updateCartState(nftId: String, isInCart: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
-        let request = CartRequest(nftId: nftId, isInCart: isInCart)
-        networkClient.send(request: request) { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success:
+        let orderRequest = OrderRequest()
+        
+        networkClient.send(request: orderRequest) { [weak self] result in
+            switch result {
+            case .success(let data):
+                do {
+                    let orderResponse = try JSONDecoder().decode(OrderResponse.self, from: data)
+                    var currentNFTs = orderResponse.nfts
+                    
                     if isInCart {
-                        self?.cartNFTs.insert(nftId)
+                        if !currentNFTs.contains(nftId) {
+                            currentNFTs.append(nftId)
+                        }
                     } else {
-                        self?.cartNFTs.remove(nftId)
+                        currentNFTs.removeAll { $0 == nftId }
                     }
-                    completion(.success(()))
-                case .failure(let error):
+                    
+                    let cartRequest = CartRequest(nfts: currentNFTs, isInCart: true)
+                    self?.networkClient.send(request: cartRequest) { result in
+                        switch result {
+                        case .success:
+                            completion(.success(()))
+                        case .failure(let error):
+                            completion(.failure(error))
+                        }
+                    }
+                } catch {
                     completion(.failure(error))
                 }
+                
+            case .failure(let error):
+                completion(.failure(error))
             }
         }
     }
