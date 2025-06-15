@@ -55,6 +55,8 @@
 		EBF2AD562DF70AE800BAF6B0 /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF2AD552DF70AE800BAF6B0 /* ProfileModel.swift */; };
 		EBF2AD582DF70B7A00BAF6B0 /* ProfilePutRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF2AD572DF70B7A00BAF6B0 /* ProfilePutRequest.swift */; };
 		EBF2AD5A2DF70BB500BAF6B0 /* ProfileAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF2AD592DF70BB500BAF6B0 /* ProfileAction.swift */; };
+		EBF2AD5E2DFEEC8900BAF6B0 /* AboutDeveloperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF2AD5D2DFEEC8900BAF6B0 /* AboutDeveloperViewController.swift */; };
+		EBF2AD602DFEEDFB00BAF6B0 /* ViewConfigurableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF2AD5F2DFEEDFB00BAF6B0 /* ViewConfigurableProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -126,6 +128,8 @@
 		EBF2AD552DF70AE800BAF6B0 /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
 		EBF2AD572DF70B7A00BAF6B0 /* ProfilePutRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePutRequest.swift; sourceTree = "<group>"; };
 		EBF2AD592DF70BB500BAF6B0 /* ProfileAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAction.swift; sourceTree = "<group>"; };
+		EBF2AD5D2DFEEC8900BAF6B0 /* AboutDeveloperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutDeveloperViewController.swift; sourceTree = "<group>"; };
+		EBF2AD5F2DFEEDFB00BAF6B0 /* ViewConfigurableProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewConfigurableProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -375,6 +379,7 @@
 				3F68069F29CBBAF200B4F915 /* Assets.xcassets */,
 				3F6806A129CBBAF200B4F915 /* LaunchScreen.storyboard */,
 				E1CD40DB2A96BECC00BE7FE8 /* Localizable.strings */,
+				EBF2AD5F2DFEEDFB00BAF6B0 /* ViewConfigurableProtocol.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -390,6 +395,7 @@
 		EBF2AD412DF4AA2700BAF6B0 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				EBF2AD5C2DFEEC7C00BAF6B0 /* AboutDeveloperScreen */,
 				EBF2AD502DF709FA00BAF6B0 /* ProfileService */,
 				EBF2AD452DF7057E00BAF6B0 /* ProfileScreen */,
 				EBF2AD432DF4AAE100BAF6B0 /* Model */,
@@ -433,6 +439,14 @@
 			children = (
 			);
 			path = "New Group";
+			sourceTree = "<group>";
+		};
+		EBF2AD5C2DFEEC7C00BAF6B0 /* AboutDeveloperScreen */ = {
+			isa = PBXGroup;
+			children = (
+				EBF2AD5D2DFEEC8900BAF6B0 /* AboutDeveloperViewController.swift */,
+			);
+			path = AboutDeveloperScreen;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -575,6 +589,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBF2AD602DFEEDFB00BAF6B0 /* ViewConfigurableProtocol.swift in Sources */,
 				EBF2AD562DF70AE800BAF6B0 /* ProfileModel.swift in Sources */,
 				3FC8C38B29D242E90081F015 /* ProductDetailsTableViewCell.swift in Sources */,
 				3F478ECF29DB474E00F6D39E /* Colors.swift in Sources */,
@@ -586,6 +601,7 @@
 				EBF2AD492DF7060D00BAF6B0 /* ProfileViewController.swift in Sources */,
 				3FC8C39329D246BA0081F015 /* DateFormatters+Presets.swift in Sources */,
 				EBF2AD542DF70A4A00BAF6B0 /* ProfileByRequest.swift in Sources */,
+				EBF2AD5E2DFEEC8900BAF6B0 /* AboutDeveloperViewController.swift in Sources */,
 				0CFCB7422A78013E0009A829 /* Nft.swift in Sources */,
 				0CF2C2DD2A783CE600FDC837 /* ErrorView.swift in Sources */,
 				0C79EE682A76DE0900EE90EA /* NftDetailPresenter.swift in Sources */,

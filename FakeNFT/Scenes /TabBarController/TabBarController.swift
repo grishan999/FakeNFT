@@ -1,27 +1,55 @@
 import UIKit
 
 final class TabBarController: UITabBarController {
-    var servicesAssembly: ServicesAssembly! {
-        didSet {
-            setupViewControllers()
-        }
+    
+    // MARK: - Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupTabBar()
+        setupViewControllers()
     }
-
+    
+    // MARK: - Private Methods
+    private func setupTabBar() {
+        tabBar.tintColor = .blue
+        tabBar.unselectedItemTintColor = .gray
+        tabBar.backgroundColor = .white
+        tabBar.isTranslucent = false
+    }
+    
     private func setupViewControllers() {
-        guard servicesAssembly != nil else { return }
+        let networkClient = DefaultNetworkClient()
         
-        let catalogTabBarItem = UITabBarItem(
-            title: NSLocalizedString("Tab.catalog", comment: ""),
-            image: UIImage(systemName: "square.stack.3d.up.fill"),
-            tag: 0
+        // Profile
+        let profileService = ProfileService(networkClient: networkClient)
+        let profileViewModel = ProfileViewModel(profileService: profileService)
+        let profileVC = ProfileViewController(viewModel: profileViewModel)
+        let profileNav = UINavigationController(rootViewController: profileVC)
+        
+        
+        profileNav.tabBarItem = createTabBarItem(
+            title: NSLocalizedString("profile", comment: ""),
+            image: UIImage(named: "profile_tab")
         )
         
-        let catalogController = TestCatalogViewController(
-            servicesAssembly: servicesAssembly
-        )
-        catalogController.tabBarItem = catalogTabBarItem
         
-        viewControllers = [catalogController]
-        view.backgroundColor = .systemBackground 
+        viewControllers = [profileNav]
+    }
+    
+    private func createTabBarItem(title: String, image: UIImage?) -> UITabBarItem {
+        let tabBarItem = UITabBarItem(
+            title: title,
+            image: image,
+            selectedImage: nil
+        )
+        
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.systemFont(ofSize: 10, weight: .medium)
+        ]
+        
+        tabBarItem.setTitleTextAttributes(attributes, for: .normal)
+        tabBarItem.setTitleTextAttributes(attributes, for: .selected)
+        
+        return tabBarItem
     }
 }
