@@ -11,7 +11,8 @@ import Kingfisher
 final class NFTCollectionCell: UICollectionViewCell {
     static let reuseIdentifier = "NFTCollectionCell"
     private let networkClient: NetworkClient = DefaultNetworkClient()
-    private var nft: Nft? 
+    private var nft: Nft?
+    private var stateService: NFTStateServiceProtocol = NFTStateService()
     
     private let imageView: UIImageView = {
         let view = UIImageView()
@@ -147,12 +148,12 @@ final class NFTCollectionCell: UICollectionViewCell {
         ])
     }
     
-    func configure(with nft: Nft, isInCart: Bool = false, isLiked: Bool = false) {
+    func configure(with nft: Nft, isLiked: Bool, isInCart: Bool) {
         self.nft = nft
         titleLabel.text = nft.name
         priceLabel.text = "\(nft.price) ETH"
-        self.isInCart = isInCart
         self.isLiked = isLiked
+        self.isInCart = isInCart
         
         if let url = nft.images.first {
             imageView.kf.setImage(with: url)
@@ -179,17 +180,17 @@ final class NFTCollectionCell: UICollectionViewCell {
             starsStackView.addArrangedSubview(star)
         }
     }
+    
     @objc private func cartButtonTapped() {
         guard let nftId = nft?.id else { return }
         let newValue = !isInCart
-        let request = CartRequest(nftId: nftId, isInCart: newValue)
         
-        networkClient.send(request: request) { result in
+        stateService.updateCartState(nftId: nftId, isInCart: newValue) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success:
-                    self.isInCart = newValue
-                    self.updateCartButtonState()
+                    self?.isInCart = newValue
+                    self?.updateCartButtonState()
                 case .failure(let error):
                     print("Failed to update cart: \(error)")
                 }
@@ -200,17 +201,15 @@ final class NFTCollectionCell: UICollectionViewCell {
     @objc private func likeButtonTapped() {
         guard let nftId = nft?.id else { return }
         let newValue = !isLiked
-        let request = LikeRequest(nftId: nftId, isLike: newValue)
         
-        networkClient.send(request: request) { result in
+        stateService.updateLikeState(nftId: nftId, isLiked: newValue) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success:
-                    self.isLiked = newValue
-                    self.updateLikeButtonState()
+                    self?.isLiked = newValue
+                    self?.updateLikeButtonState()
                 case .failure(let error):
                     print("Failed to update like: \(error)")
-
                 }
             }
         }

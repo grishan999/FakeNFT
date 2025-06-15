@@ -11,6 +11,8 @@ import ProgressHUD
 
 final class NFTCollectionViewController: UIViewController {
     
+    private let stateService: NFTStateServiceProtocol = NFTStateService()
+    
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -98,13 +100,20 @@ final class NFTCollectionViewController: UIViewController {
         setupUI()
         setupBindings()
         
+        loadInitialStates()
         viewModel.loadNFTs()
     }
+    
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         updateCollectionViewHeight()
     }
+    
+    private func loadInitialStates() {
+            stateService.getLikedNFTs { _ in }
+            stateService.getCartNFTs { _ in }
+        }
     
     private func setupNavigationBar() {
         navigationItem.largeTitleDisplayMode = .never
@@ -157,7 +166,7 @@ final class NFTCollectionViewController: UIViewController {
         let authorStack = UIStackView(arrangedSubviews: [authorTitleLabel, authorNameLabel])
         authorStack.axis = .horizontal
         authorStack.spacing = 4
-        authorStack.alignment = .leading
+        authorStack.alignment = .firstBaseline 
         authorStack.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(authorStack)
         
@@ -266,12 +275,14 @@ extension NFTCollectionViewController: UICollectionViewDataSource, UICollectionV
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NFTCollectionCell.reuseIdentifier, for: indexPath) as! NFTCollectionCell
-        let nft = viewModel.nfts[indexPath.item]
-        cell.configure(with: nft)
-        return cell
-    }
-    
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NFTCollectionCell.reuseIdentifier, for: indexPath) as! NFTCollectionCell
+            let nft = viewModel.nfts[indexPath.item]
+            let isLiked = stateService.isLiked(nftId: nft.id)
+            let isInCart = stateService.isInCart(nftId: nft.id)
+            cell.configure(with: nft, isLiked: isLiked, isInCart: isInCart)
+            return cell
+        }
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = (collectionView.bounds.width - 32) / 3
         return CGSize(width: width, height: maxCellHeight > 0 ? maxCellHeight : 192)

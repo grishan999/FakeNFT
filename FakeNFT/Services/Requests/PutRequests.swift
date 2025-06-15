@@ -58,3 +58,29 @@ struct CartDTO: Dto {
         return ["nfts": nftId, "isInCart": isInCart ? "true" : "false"]
     }
 }
+
+struct ProfileRequest: NetworkRequest {
+    var endpoint: URL? {
+        URL(string: "\(RequestConstants.baseURL)/api/v1/profile/1")
+    }
+    
+    var httpMethod: HttpMethod { .get }
+    var dto: Dto? { nil }
+}
+
+struct OrderRequest: NetworkRequest {
+    var endpoint: URL? {
+        URL(string: "\(RequestConstants.baseURL)/api/v1/orders/1")
+    }
+    
+    var httpMethod: HttpMethod { .get }
+    var dto: Dto? { nil }
+}
+
+struct ProfileResponse: Decodable {
+    let likes: [String]
+}
+
+struct OrderResponse: Decodable {
+    let nfts: [String]
+}
