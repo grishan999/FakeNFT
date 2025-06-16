@@ -29,6 +29,7 @@ final class NFTCollectionViewController: UIViewController {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 12
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -135,7 +136,7 @@ final class NFTCollectionViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = .systemBackground
         setContentHidden(true)
-    
+
         view.addSubview(coverImageView)
         NSLayoutConstraint.activate([
             coverImageView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -166,12 +167,11 @@ final class NFTCollectionViewController: UIViewController {
         let authorStack = UIStackView(arrangedSubviews: [authorTitleLabel, authorNameLabel])
         authorStack.axis = .horizontal
         authorStack.spacing = 4
-        authorStack.alignment = .firstBaseline 
+        authorStack.alignment = .firstBaseline
         authorStack.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(authorStack)
         
         contentView.addSubview(descriptionLabel)
-        
         contentView.addSubview(collectionView)
         
         NSLayoutConstraint.activate([
@@ -183,7 +183,7 @@ final class NFTCollectionViewController: UIViewController {
             authorStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             authorStack.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -16),
             
-            descriptionLabel.topAnchor.constraint(equalTo: authorStack.bottomAnchor, constant: 0),
+            descriptionLabel.topAnchor.constraint(equalTo: authorStack.bottomAnchor, constant: 4),
             descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
