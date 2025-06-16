@@ -33,16 +33,13 @@ final class NFTStateService: NFTStateServiceProtocol {
     }
     
     func getLikedNFTs(completion: @escaping (Result<Set<String>, Error>) -> Void) {
-        guard !isLoadingLikes else { return }
-        isLoadingLikes = true
-        
         let request = ProfileRequest()
         networkClient.send(request: request, type: ProfileResponse.self) { [weak self] result in
-            self?.isLoadingLikes = false
             switch result {
             case .success(let response):
-                self?.likedNFTs = Set(response.likes)
-                completion(.success(Set(response.likes)))
+                let likes = Set(response.likes)
+                self?.likedNFTs = likes
+                completion(.success(likes))
             case .failure(let error):
                 completion(.failure(error))
             }
@@ -67,16 +64,20 @@ final class NFTStateService: NFTStateServiceProtocol {
     }
     
     func updateLikeState(nftId: String, isLiked: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
-        let request = LikeRequest(nftId: nftId, isLike: isLiked)
+        var updatedLikes = likedNFTs
+        if isLiked {
+            updatedLikes.insert(nftId)
+        } else {
+            updatedLikes.remove(nftId)
+        }
+        
+        let request = LikeRequest(likes: Array(updatedLikes))
+        
         networkClient.send(request: request) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success:
-                    if isLiked {
-                        self?.likedNFTs.insert(nftId)
-                    } else {
-                        self?.likedNFTs.remove(nftId)
-                    }
+                    self?.likedNFTs = updatedLikes
                     completion(.success(()))
                 case .failure(let error):
                     completion(.failure(error))
@@ -103,7 +104,7 @@ final class NFTStateService: NFTStateServiceProtocol {
                         currentNFTs.removeAll { $0 == nftId }
                     }
                     
-                    let cartRequest = CartRequest(nfts: currentNFTs, isInCart: true)
+                    let cartRequest = CartRequest(nfts: currentNFTs, isInCart: isInCart)
                     self?.networkClient.send(request: cartRequest) { result in
                         switch result {
                         case .success:

@@ -92,10 +92,46 @@ final class NFTCollectionCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        loadInitialStates()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) not implemented")
+    }
+    
+    private func loadInitialStates() {
+        loadLikesFromServer()
+        loadCartStateFromServer()
+    }
+    
+    private func loadLikesFromServer() {
+        stateService.getLikedNFTs { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let likes):
+                    guard let nftId = self?.nft?.id else { return }
+                    self?.isLiked = likes.contains(nftId)
+                    self?.updateLikeButtonState()
+                case .failure:
+                    break
+                }
+            }
+        }
+    }
+    
+    private func loadCartStateFromServer() {
+        stateService.getCartNFTs { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let cartItems):
+                    guard let nftId = self?.nft?.id else { return }
+                    self?.isInCart = cartItems.contains(nftId)
+                    self?.updateCartButtonState()
+                case .failure:
+                    break
+                }
+            }
+        }
     }
     
     private func setupUI() {
@@ -112,7 +148,6 @@ final class NFTCollectionCell: UICollectionViewCell {
         contentView.addSubview(cartButton)
         
         NSLayoutConstraint.activate([
-            
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             imageView.widthAnchor.constraint(equalToConstant: 108),
@@ -191,8 +226,8 @@ final class NFTCollectionCell: UICollectionViewCell {
                 case .success:
                     self?.isInCart = newValue
                     self?.updateCartButtonState()
-                case .failure(let error):
-                    print("Failed to update cart: \(error)")
+                case .failure:
+                    break
                 }
             }
         }
@@ -208,8 +243,8 @@ final class NFTCollectionCell: UICollectionViewCell {
                 case .success:
                     self?.isLiked = newValue
                     self?.updateLikeButtonState()
-                case .failure(let error):
-                    print("Failed to update like: \(error)")
+                case .failure:
+                    break
                 }
             }
         }

@@ -6,10 +6,10 @@
 //
 
 import Foundation
+import Foundation
 
 struct LikeRequest: NetworkRequest {
-    let nftId: String
-    let isLike: Bool
+    let likes: [String]
     
     var endpoint: URL? {
         URL(string: "\(RequestConstants.baseURL)/api/v1/profile/1")
@@ -20,16 +20,16 @@ struct LikeRequest: NetworkRequest {
     }
     
     var dto: Dto? {
-        return LikeDTO(nftId: nftId, isLike: isLike)
+        return LikeDTO(likes: likes)
     }
 }
 
 struct LikeDTO: Dto {
-    let nftId: String
-    let isLike: Bool
+    let likes: [String]
     
     func asDictionary() -> [String: String] {
-        return ["likes": nftId, "isLike": isLike ? "true" : "false"]
+        let likesString = likes.joined(separator: ",")
+        return ["likes": likesString]
     }
 }
 
