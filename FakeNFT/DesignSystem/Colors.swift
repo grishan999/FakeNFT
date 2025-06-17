@@ -66,4 +66,28 @@ extension UIColor {
         ? .yaBlackDark
         : .yaBlackLight
     }
+    
+    static var fontColor: UIColor {
+        return UIColor { traitCollection in
+            return traitCollection.userInterfaceStyle == .dark ?
+                .white   :  // Цвет для тёмной темы
+                .black // Цвет для светлой темы
+        }
+    }
+    
+    static var buttonColor: UIColor {
+        return UIColor { traitCollection in
+            return traitCollection.userInterfaceStyle == .dark ?
+                .white   :  // Цвет для тёмной темы
+                .black  // Цвет для светлой темы
+        }
+    }
+    
+    static var backgroudColor: UIColor {
+        return UIColor { traitCollection in
+            return traitCollection.userInterfaceStyle == .dark ?
+                .black   :  // Цвет для тёмной темы
+                .white // Цвет для светлой темы
+        }
+    }
 }

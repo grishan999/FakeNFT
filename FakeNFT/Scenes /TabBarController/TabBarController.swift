@@ -2,54 +2,48 @@ import UIKit
 
 final class TabBarController: UITabBarController {
     
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupTabBar()
-        setupViewControllers()
+        generateTabBar()
     }
     
-    // MARK: - Private Methods
-    private func setupTabBar() {
+    private func generateTabBar() {
+        let profileViewController = UINavigationController(rootViewController: ProfileViewController())
+        let catalogViewController = UINavigationController(rootViewController: CatalogViewController())
+        let cartViewController = UINavigationController(rootViewController: CartViewController())
+        let statisticsViewController = UINavigationController(rootViewController: StatisticsViewController())
+        
         tabBar.tintColor = .blue
-        tabBar.unselectedItemTintColor = .gray
-        tabBar.backgroundColor = .white
-        tabBar.isTranslucent = false
-    }
-    
-    private func setupViewControllers() {
-        let networkClient = DefaultNetworkClient()
-        
-        // Profile
-        let profileService = ProfileService(networkClient: networkClient)
-        let profileViewModel = ProfileViewModel(profileService: profileService)
-        let profileVC = ProfileViewController(viewModel: profileViewModel)
-        let profileNav = UINavigationController(rootViewController: profileVC)
-        
-        
-        profileNav.tabBarItem = createTabBarItem(
-            title: NSLocalizedString("profile", comment: ""),
-            image: UIImage(named: "profile_tab")
-        )
-        
-        
-        viewControllers = [profileNav]
-    }
-    
-    private func createTabBarItem(title: String, image: UIImage?) -> UITabBarItem {
-        let tabBarItem = UITabBarItem(
-            title: title,
-            image: image,
-            selectedImage: nil
-        )
-        
-        let attributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: 10, weight: .medium)
+        tabBar.unselectedItemTintColor = .buttonColor
+        viewControllers = [
+            generateVC(viewController: profileViewController,
+                       title: NSLocalizedString("profile", comment: ""),
+                       image: UIImage(named: "profile_tab")
+                      ),
+            generateVC(viewController: catalogViewController,
+                       title: NSLocalizedString("catalog", comment: ""),
+                       image: UIImage(named: "catalog_tab")
+                      ),
+            generateVC(viewController: cartViewController,
+                       title: NSLocalizedString("cart", comment: ""),
+                       image: UIImage(named: "cart_tab")
+                      ),
+            generateVC(viewController: statisticsViewController,
+                       title: NSLocalizedString("statistics", comment: ""),
+                       image: UIImage(named: "stats_tab")
+                      )
         ]
+    }
+    
+    private func generateVC(viewController: UIViewController, title: String, image: UIImage?) -> UIViewController {
+        viewController.tabBarItem.title = title
+        viewController.tabBarItem.image = image
         
-        tabBarItem.setTitleTextAttributes(attributes, for: .normal)
-        tabBarItem.setTitleTextAttributes(attributes, for: .selected)
+        let attributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10, weight: .medium)]
+        viewController.tabBarItem.setTitleTextAttributes(attributes, for: .normal)
+        viewController.tabBarItem.setTitleTextAttributes(attributes, for: .selected)
         
-        return tabBarItem
+        return viewController
     }
 }
+

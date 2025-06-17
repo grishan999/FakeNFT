@@ -3,7 +3,7 @@ import Foundation
 enum ProfileAction {
     case navigateToMyNFTs
     case navigateToFavorites
-    case openUserWebsite(url: String)
+    case openUserWebsite
     case none
 }
 
