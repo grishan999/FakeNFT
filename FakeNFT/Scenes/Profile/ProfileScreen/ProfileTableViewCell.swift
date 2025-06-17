@@ -27,11 +27,16 @@ final class ProfileTableViewCell: UITableViewCell {
             imageView.image = arrowImage.withRenderingMode(.alwaysTemplate)
             imageView.tintColor = .buttonColor
         }
-        imageView.transform = CGAffineTransform(rotationAngle: .pi)
+        imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            imageView.widthAnchor.constraint(equalToConstant: 7.98),
+            imageView.heightAnchor.constraint(equalToConstant: 13.86)
+        ])
+        
         return imageView
     }()
-    
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

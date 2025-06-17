@@ -13,7 +13,7 @@ final class TabBarController: UITabBarController {
         let cartViewController = UINavigationController(rootViewController: CartViewController())
         let statisticsViewController = UINavigationController(rootViewController: StatisticsViewController())
         
-        tabBar.tintColor = .blue
+        tabBar.tintColor = .blueUniversal
         tabBar.unselectedItemTintColor = .buttonColor
         viewControllers = [
             generateVC(viewController: profileViewController,

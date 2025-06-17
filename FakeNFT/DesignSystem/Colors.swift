@@ -26,7 +26,7 @@ extension UIColor {
     }
 
     // Ниже приведены примеры цветов, настоящие цвета надо взять из фигмы
-
+    static var blueUniversal: UIColor { #colorLiteral(red: 0.03921568627, green: 0.5176470588, blue: 1, alpha: 1) }
     
    
     // Primary Colors

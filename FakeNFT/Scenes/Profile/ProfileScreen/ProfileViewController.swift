@@ -69,7 +69,7 @@ final class ProfileViewController: UIViewController {
         let button = UIButton()
         button.setTitle(viewModel.userWebsite, for: .normal)
         button.titleLabel?.font = .caption1
-        button.setTitleColor(.blue, for: .normal)
+        button.setTitleColor(.blueUniversal, for: .normal)
         button.addTarget(self, action: #selector(profileLinkTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
