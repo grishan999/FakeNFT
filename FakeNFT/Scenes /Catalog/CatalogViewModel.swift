@@ -42,13 +42,15 @@ final class CatalogViewModel {
     
     private var currentSortType: SortType {
         get {
-            guard let rawValue = userDefaults.string(forKey: sortTypeKey) else {
+            guard let rawValue = UserDefaults.standard.string(forKey: sortTypeKey) else {
                 return .none
             }
-            return SortType(rawValue: rawValue) ?? .none
+            let type = SortType(rawValue: rawValue) ?? .none
+            return type
         }
         set {
-            userDefaults.set(newValue.rawValue, forKey: sortTypeKey)
+            UserDefaults.standard.set(newValue.rawValue, forKey: sortTypeKey)
+            UserDefaults.standard.synchronize() 
         }
     }
     
@@ -69,40 +71,45 @@ final class CatalogViewModel {
         
         nftClient.fetchCollections { [weak self] result in
             DispatchQueue.main.async {
-                self?.isLoading = false
+                guard let self = self else { return }
+                self.isLoading = false
                 
                 switch result {
                 case .success(let collections):
-                    self?.categories = collections.compactMap { collection in
-                        guard let url = URL(string: collection.cover) else {
-                            print("Invalid URL string: \(collection.cover)")
-                            return nil
-                        }
-                        return CatalogCategory(
-                            imageUrl: url,
-                            title: collection.name,
-                            count: collection.nfts.count
+                    let unsortedCategories = collections.map {
+                        CatalogCategory(
+                            id: $0.id,
+                            imageUrl: $0.cover,
+                            title: $0.name,
+                            count: $0.nfts.count
                         )
                     }
-                    self?.applySavedSort()
+                    
+                    switch self.currentSortType {
+                    case .byName:
+                        self.categories = unsortedCategories.sorted { $0.title < $1.title }
+                    case .byCount:
+                        self.categories = unsortedCategories.sorted { $0.count > $1.count }
+                    case .none:
+                        self.categories = unsortedCategories
+                    }
+                
                 case .failure(let error):
-                    self?.error = error.localizedDescription
+                    self.error = error.localizedDescription
                 }
             }
         }
     }
     
     func sortByName() {
-        categories.sort {
-            $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending
-        }
+        categories.sort { $0.title.lowercased() < $1.title.lowercased() }
         currentSortType = .byName
         onCategoriesUpdate?(categories)
     }
-    
+
     func sortByCount() {
         categories.sort { $0.count > $1.count }
-        onCategoriesUpdate?(categories)
         currentSortType = .byCount
+        onCategoriesUpdate?(categories)
     }
 }

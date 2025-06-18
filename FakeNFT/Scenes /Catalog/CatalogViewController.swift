@@ -10,11 +10,12 @@ import ProgressHUD
 
 final class CatalogViewController: UIViewController {
     private lazy var tableView = UITableView()
-    private lazy var filterButton = UIButton()
     private let viewModel: CatalogViewModel
+    private let servicesAssembly: ServicesAssembly
     
-    init(viewModel: CatalogViewModel) {
+    init(viewModel: CatalogViewModel, servicesAssembly: ServicesAssembly) {
         self.viewModel = viewModel
+        self.servicesAssembly = servicesAssembly
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -25,8 +26,22 @@ final class CatalogViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupNavigationBar()
         setupViewModelBindings()
         viewModel.loadCategories()
+    }
+    
+    private func setupNavigationBar() {
+        title = nil
+        
+        let image = UIImage(named: "SortCatalog")?.withRenderingMode(.alwaysOriginal)
+        let filterButton = UIBarButtonItem(
+            image: image,
+            style: .plain,
+            target: self,
+            action: #selector(filterTapped)
+        )
+        navigationItem.rightBarButtonItem = filterButton
     }
     
     private func setupViewModelBindings() {
@@ -49,7 +64,6 @@ final class CatalogViewController: UIViewController {
                 }
             }
         }
-        
     }
     
     private func setupUI() {
@@ -62,18 +76,8 @@ final class CatalogViewController: UIViewController {
         tableView.register(CatalogCell.self, forCellReuseIdentifier: CatalogCell.reuseIdentifier)
         view.addSubview(tableView)
         
-        filterButton.translatesAutoresizingMaskIntoConstraints = false
-        filterButton.setImage(UIImage(named: "SortCatalog"), for: .normal)
-        filterButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
-        view.addSubview(filterButton)
-        
         NSLayoutConstraint.activate([
-            filterButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 2),
-            filterButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            filterButton.widthAnchor.constraint(equalToConstant: 44),
-            filterButton.heightAnchor.constraint(equalToConstant: 44),
-            
-            tableView.topAnchor.constraint(equalTo: filterButton.bottomAnchor, constant: 20),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -104,7 +108,13 @@ extension CatalogViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CatalogCell.reuseIdentifier, for: indexPath) as! CatalogCell
-        cell.configure(with: viewModel.categories[indexPath.row])
+        
+        guard indexPath.row < viewModel.categories.count else {
+            return cell
+        }
+        
+        let category = viewModel.categories[indexPath.row]
+        cell.configure(with: category)
         return cell
     }
 }
@@ -114,4 +124,12 @@ extension CatalogViewController: UITableViewDelegate {
         188
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let category = viewModel.categories[indexPath.row]
+        
+        let nftCollectionViewModel = servicesAssembly.nftCollectionViewModel(collectionId: category.id)
+        let nftCollectionVC = NFTCollectionViewController(viewModel: nftCollectionViewModel)
+        navigationController?.pushViewController(nftCollectionVC, animated: true)
+    }
 }
