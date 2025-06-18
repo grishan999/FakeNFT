@@ -18,8 +18,6 @@ final class TestCatalogViewController: UIViewController {
         super.viewDidLoad()
 
         view.backgroundColor = .systemBackground
-
-        //!!!!test push
         
         view.addSubview(testNftButton)
         testNftButton.constraintCenters(to: view)

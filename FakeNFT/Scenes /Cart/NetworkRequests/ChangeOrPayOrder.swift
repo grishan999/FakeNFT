@@ -1,6 +1,6 @@
 import Foundation
 
-struct ChangeOrderRequest: NetworkRequest {
+struct ChangeOrPayOrder: NetworkRequest {
     let nftIds: [String]
     
     var endpoint: URL? {
@@ -12,6 +12,6 @@ struct ChangeOrderRequest: NetworkRequest {
     }
     
     var dto: Dto? {
-        return nil  // ✅ Больше не нужно, NetworkClient использует nftIds напрямую
+        return nil  //  Больше не нужно, NetworkClient использует nftIds напрямую
     }
 }

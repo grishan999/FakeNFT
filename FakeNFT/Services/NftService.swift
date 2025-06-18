@@ -3,17 +3,19 @@ import Foundation
 typealias NftCompletion = (Result<Nft, Error>) -> Void
 typealias OrderCompletion = (Result<Order, Error>) -> Void
 typealias nftCartModelCompletion = (Result<nftCartModel, Error>) -> Void
+typealias currenciesCompletion = (Result<[Currency], Error>) -> Void
 
 
 protocol NftService {
     func loadNft(id: String, completion: @escaping NftCompletion)
     func loadOrder(id: String, completion: @escaping OrderCompletion)
     func loadNftCartModel(id: String, completion: @escaping nftCartModelCompletion)
-    func changeOrder(nftIds: [String], completion: @escaping OrderCompletion)
+    func changeOrPatOrder(nftIds: [String], completion: @escaping OrderCompletion)
+    func loadCurrencies(completion : @escaping currenciesCompletion)
 }
 
 final class NftServiceImpl: NftService {
-    
+
     private let networkClient: NetworkClient
     private let storage: NftStorage
 
@@ -78,8 +80,8 @@ final class NftServiceImpl: NftService {
         }
     }
     
-    func changeOrder(nftIds: [String], completion: @escaping OrderCompletion) {
-        let request = ChangeOrderRequest(nftIds: nftIds)  // ✅ Передаем массив
+    func changeOrPatOrder(nftIds: [String], completion: @escaping OrderCompletion) {
+        let request = ChangeOrPayOrder(nftIds: nftIds)  // Передаем массив
         
         networkClient.send(request: request, type: Order.self) { [weak storage] result in
             switch result {
@@ -95,4 +97,20 @@ final class NftServiceImpl: NftService {
             }
         }
     }
+    
+    func loadCurrencies(completion: @escaping currenciesCompletion) {
+        let request = CurrencyRequest()
+        
+        networkClient.send(request: request, type: [Currency].self) { result in
+            switch result {
+            case .success(let currencies):
+                completion(.success(currencies))
+                
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    
 }

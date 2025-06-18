@@ -126,7 +126,7 @@ struct DefaultNetworkClient: NetworkClient {
         print("🔑 Token: \(RequestConstants.token)")
 
         // ✅ Специальная логика для ChangeOrderRequest
-        if let changeOrderRequest = request as? ChangeOrderRequest {
+        if let changeOrderRequest = request as? ChangeOrPayOrder {
             print("🔄 ChangeOrderRequest detected")
             print("📦 NFT IDs: \(changeOrderRequest.nftIds)")
             
