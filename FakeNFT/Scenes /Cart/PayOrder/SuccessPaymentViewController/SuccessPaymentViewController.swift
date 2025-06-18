@@ -22,7 +22,7 @@ final class SuccessPaymentViewController: UIViewController {
         return label
     }()
     
-    private lazy var backToCatalogButton: UIButton = {
+    private lazy var backToCartButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Вернуться в каталог", for: .normal)
         button.setTitleColor(.white, for: .normal)
@@ -30,7 +30,7 @@ final class SuccessPaymentViewController: UIViewController {
         button.backgroundColor = .black
         button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(backToCatalogTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(backToCartTapped), for: .touchUpInside)
         return button
     }()
     
@@ -47,7 +47,7 @@ final class SuccessPaymentViewController: UIViewController {
         
         view.addSubview(successImageView)
         view.addSubview(successLabel)
-        view.addSubview(backToCatalogButton)
+        view.addSubview(backToCartButton)
     }
     
     private func setupConstraints() {
@@ -64,15 +64,15 @@ final class SuccessPaymentViewController: UIViewController {
             successLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
             
             // Back to Catalog Button
-            backToCatalogButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            backToCatalogButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            backToCatalogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -32),
-            backToCatalogButton.heightAnchor.constraint(equalToConstant: 60)
+            backToCartButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            backToCartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            backToCartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -32),
+            backToCartButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     
     // MARK: - Actions
-    @objc private func backToCatalogTapped() {
+    @objc private func backToCartTapped() {
         
         //  Получаем TabBarController из SceneDelegate
         if let tabBarController = getTabBarControllerFromSceneDelegate() {
