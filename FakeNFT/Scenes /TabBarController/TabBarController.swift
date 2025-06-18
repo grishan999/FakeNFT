@@ -1,27 +1,49 @@
 import UIKit
 
 final class TabBarController: UITabBarController {
-    var servicesAssembly: ServicesAssembly! {
-        didSet {
-            setupViewControllers()
-        }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        generateTabBar()
     }
-
-    private func setupViewControllers() {
-        guard servicesAssembly != nil else { return }
+    
+    private func generateTabBar() {
+        let profileViewController = UINavigationController(rootViewController: ProfileViewController())
+        let catalogViewController = UINavigationController(rootViewController: CatalogViewController())
+        let cartViewController = UINavigationController(rootViewController: CartViewController())
+        let statisticsViewController = UINavigationController(rootViewController: StatisticsViewController())
         
-        let catalogTabBarItem = UITabBarItem(
-            title: NSLocalizedString("Tab.catalog", comment: ""),
-            image: UIImage(systemName: "square.stack.3d.up.fill"),
-            tag: 0
-        )
+        tabBar.tintColor = .blueUniversal
+        tabBar.unselectedItemTintColor = .buttonColor
+        viewControllers = [
+            generateVC(viewController: profileViewController,
+                       title: NSLocalizedString("profile", comment: ""),
+                       image: UIImage(named: "profile_tab")
+                      ),
+            generateVC(viewController: catalogViewController,
+                       title: NSLocalizedString("catalog", comment: ""),
+                       image: UIImage(named: "catalog_tab")
+                      ),
+            generateVC(viewController: cartViewController,
+                       title: NSLocalizedString("cart", comment: ""),
+                       image: UIImage(named: "cart_tab")
+                      ),
+            generateVC(viewController: statisticsViewController,
+                       title: NSLocalizedString("statistics", comment: ""),
+                       image: UIImage(named: "stats_tab")
+                      )
+        ]
+    }
+    
+    private func generateVC(viewController: UIViewController, title: String, image: UIImage?) -> UIViewController {
+        viewController.tabBarItem.title = title
+        viewController.tabBarItem.image = image
         
-        let catalogController = TestCatalogViewController(
-            servicesAssembly: servicesAssembly
-        )
-        catalogController.tabBarItem = catalogTabBarItem
+        let attributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10, weight: .medium)]
+        viewController.tabBarItem.setTitleTextAttributes(attributes, for: .normal)
+        viewController.tabBarItem.setTitleTextAttributes(attributes, for: .selected)
         
-        viewControllers = [catalogController]
-        view.backgroundColor = .systemBackground 
+        return viewController
     }
 }
+

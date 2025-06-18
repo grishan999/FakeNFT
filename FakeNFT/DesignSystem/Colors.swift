@@ -26,7 +26,9 @@ extension UIColor {
     }
 
     // Ниже приведены примеры цветов, настоящие цвета надо взять из фигмы
-
+    static var blueUniversal: UIColor { #colorLiteral(red: 0.03921568627, green: 0.5176470588, blue: 1, alpha: 1) }
+    
+   
     // Primary Colors
     static let primary = UIColor(red: 0 / 255, green: 122 / 255, blue: 255 / 255, alpha: 1.0)
 
@@ -63,5 +65,29 @@ extension UIColor {
         return traits.userInterfaceStyle == .dark
         ? .yaBlackDark
         : .yaBlackLight
+    }
+    
+    static var fontColor: UIColor {
+        return UIColor { traitCollection in
+            return traitCollection.userInterfaceStyle == .dark ?
+                .white   :  // Цвет для тёмной темы
+                .black // Цвет для светлой темы
+        }
+    }
+    
+    static var buttonColor: UIColor {
+        return UIColor { traitCollection in
+            return traitCollection.userInterfaceStyle == .dark ?
+                .white   :  // Цвет для тёмной темы
+                .black  // Цвет для светлой темы
+        }
+    }
+    
+    static var backgroudColor: UIColor {
+        return UIColor { traitCollection in
+            return traitCollection.userInterfaceStyle == .dark ?
+                .black   :  // Цвет для тёмной темы
+                .white // Цвет для светлой темы
+        }
     }
 }
