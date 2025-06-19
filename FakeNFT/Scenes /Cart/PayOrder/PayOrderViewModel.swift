@@ -17,7 +17,7 @@ final class PayOrderViewModel: PayOrderViewModelProtocol {
     func payOrderButtonPressed(completion: @escaping (Result<String, any Error>) -> Void) {
 
         //  Отправляем запрос на сервер
-        servicesAssembly.nftService.changeOrPatOrder(nftIds: []) { result in
+        servicesAssembly.nftService.changeOrPaytOrder(nftIds: []) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success:

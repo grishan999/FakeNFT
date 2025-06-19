@@ -7,6 +7,7 @@ protocol CartViewModelProtocol: AnyObject {
     var onFooterUpdated: ((CartViewState) -> Void)? { get set }  //  Отдельный callback для footer
     var onError: ((String) -> Void)? { get set }
     var onShowDeleteConfirmation: ((String, URL?) -> Void)? { get set }
+    var onGetSortedNfts: (([NFTCellState]) -> Void)? { get set }
     
     func viewDidLoad()
     func removeItemRequested(nftID: String)
@@ -17,6 +18,7 @@ protocol CartViewModelProtocol: AnyObject {
 // MARK: - ViewModel
 
 final class CartViewModel: CartViewModelProtocol {
+   
     func sortBy(_ type: SortType) {
         switch type {
             
@@ -46,17 +48,7 @@ final class CartViewModel: CartViewModelProtocol {
             print("Отсортировано по названию")
         }
         
-        //  ВАЖНО: Обновляем состояние ПОСЛЕ сортировки для ВСЕХ случаев
-        let footerInfo = createFooterInfo()
-        
-        let state = CartViewState(
-            cellStates: nftCellStates,
-            doneLoading: doneLoading,
-            footerInfo: footerInfo
-        )
-        
-        //  Уведомляем View об изменении состояния
-        self.onStateChanged?(state)
+        self.onGetSortedNfts?(nftCellStates)
     }
     
     
@@ -68,6 +60,7 @@ final class CartViewModel: CartViewModelProtocol {
     var onFooterUpdated: ((CartViewState) -> Void)?  //  Отдельный callback для footer
     var onError: ((String) -> Void)?
     var onShowDeleteConfirmation: ((String, URL?) -> Void)?
+    var onGetSortedNfts: (([NFTCellState]) -> Void)?
     
     // MARK: - Properties
     
@@ -93,7 +86,7 @@ final class CartViewModel: CartViewModelProtocol {
     
     // MARK: - Private Methods (внутренняя логика)
     
-    // ИСПРАВЛЕННЫЙ центральный метод обновления состояния
+    // центральный метод обновления состояния
     private func updateViewState(changedIndex: Int? = nil) {
         let footerInfo = createFooterInfo()
         
@@ -213,8 +206,9 @@ final class CartViewModel: CartViewModelProtocol {
         if loadedCount == totalCount && totalCount > 0 {
             doneLoading = true
             
-            //  ПРОСТОЕ РЕШЕНИЕ: отдельный callback только для обновления footer
+            //  отдельный callback только для обновления footer
             let footerInfo = createFooterInfo()
+            
             let state = CartViewState(
                 cellStates: nftCellStates,
                 doneLoading: doneLoading,
@@ -252,7 +246,7 @@ final class CartViewModel: CartViewModelProtocol {
         print("📋 Стало NFT: \(filteredNftIds)")
         
         //  Отправляем запрос на сервер
-        servicesAssembly.nftService.changeOrPatOrder(nftIds: filteredNftIds) { [weak self] result in
+        servicesAssembly.nftService.changeOrPaytOrder(nftIds: filteredNftIds) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success:

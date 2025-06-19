@@ -61,7 +61,7 @@
 		F476BF0C2DFF042000EEA2F3 /* CurrenciesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BF0B2DFF041E00EEA2F3 /* CurrenciesModel.swift */; };
 		F476BF0E2DFF0C3600EEA2F3 /* CurrencyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BF0D2DFF0C3600EEA2F3 /* CurrencyRequest.swift */; };
 		F476BF782DFF3D5300EEA2F3 /* PayOrdercollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BF772DFF3D5300EEA2F3 /* PayOrdercollectionViewCell.swift */; };
-		F476BF7D2E0051D000EEA2F3 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BF7B2E0051D000EEA2F3 /* Storage.swift */; };
+		F476BF7D2E0051D000EEA2F3 /* FilterStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BF7B2E0051D000EEA2F3 /* FilterStorage.swift */; };
 		F476BF7F2E0065CD00EEA2F3 /* WebViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BF7E2E0065C500EEA2F3 /* WebViewContoller.swift */; };
 		F476BF822E0182B300EEA2F3 /* SuccessPaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BF812E0182B300EEA2F3 /* SuccessPaymentViewController.swift */; };
 /* End PBXBuildFile section */
@@ -141,7 +141,7 @@
 		F476BF0B2DFF041E00EEA2F3 /* CurrenciesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrenciesModel.swift; sourceTree = "<group>"; };
 		F476BF0D2DFF0C3600EEA2F3 /* CurrencyRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyRequest.swift; sourceTree = "<group>"; };
 		F476BF772DFF3D5300EEA2F3 /* PayOrdercollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayOrdercollectionViewCell.swift; sourceTree = "<group>"; };
-		F476BF7B2E0051D000EEA2F3 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
+		F476BF7B2E0051D000EEA2F3 /* FilterStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterStorage.swift; sourceTree = "<group>"; };
 		F476BF7E2E0065C500EEA2F3 /* WebViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewContoller.swift; sourceTree = "<group>"; };
 		F476BF812E0182B300EEA2F3 /* SuccessPaymentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessPaymentViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -457,7 +457,7 @@
 		F476BF7A2E0051BE00EEA2F3 /* UserDefaults */ = {
 			isa = PBXGroup;
 			children = (
-				F476BF7B2E0051D000EEA2F3 /* Storage.swift */,
+				F476BF7B2E0051D000EEA2F3 /* FilterStorage.swift */,
 			);
 			path = UserDefaults;
 			sourceTree = "<group>";
@@ -640,7 +640,7 @@
 				F476BEF52DF631AC00EEA2F3 /* Order.swift in Sources */,
 				0CFCB74E2A7817DC0009A829 /* NftStorage.swift in Sources */,
 				F476BF7F2E0065CD00EEA2F3 /* WebViewContoller.swift in Sources */,
-				F476BF7D2E0051D000EEA2F3 /* Storage.swift in Sources */,
+				F476BF7D2E0051D000EEA2F3 /* FilterStorage.swift in Sources */,
 				F476BF012DF78C5900EEA2F3 /* ChangeOrPayOrder.swift in Sources */,
 				3FC8C39129D2453B0081F015 /* ExamplePutRequest.swift in Sources */,
 				0CFCB7462A78064B0009A829 /* NftDetailCellModel.swift in Sources */,

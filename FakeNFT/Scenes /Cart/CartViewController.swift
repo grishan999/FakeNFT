@@ -2,10 +2,10 @@ import Foundation
 import UIKit
 import ProgressHUD
 
-enum SortType {
-    case price
-    case rating
-    case name
+enum SortType: String, CaseIterable {
+    case price = "price"
+    case rating = "rating"
+    case name = "name"
 }
 
 //  Единая структура состояния - все данные для View в одном месте
@@ -134,7 +134,7 @@ final class CartViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.viewDidLoad()
+        //viewModel.viewDidLoad()
     }
     
     private func setupEmptyCartLabel() {
@@ -185,6 +185,7 @@ final class CartViewController: UIViewController {
         // ОБНОВЛЕНИЕ FOOTER: только footer, никаких reloadData()
         viewModel.onFooterUpdated = { [weak self] state in
             self?.updateFooterOnly(state)
+               self?.sortNfts()
         }
         
         //  Подписываемся на ошибки
@@ -196,9 +197,32 @@ final class CartViewController: UIViewController {
         viewModel.onShowDeleteConfirmation = { [weak self] nftID, imageURL in
             self?.showDeleteConfirmation(nftID: nftID, imageURL: imageURL)
         }
+        
+        // Подписываемся на получение сортированного массива
+        viewModel.onGetSortedNfts = { [weak self] nftsArray in
+            self?.currentState.cellStates = nftsArray
+            self?.tableView.reloadData()
+        }
+        
+        
     }
     
     // MARK: - State Updates
+    
+    private func sortNfts(){
+        guard let sortOrder = FilterStorage.shared.chosenFilter else { return }
+        
+        switch sortOrder {
+        case "price":
+            viewModel.sortBy(.price)
+        case "rating":
+            viewModel.sortBy(.rating)
+        case "name":
+            viewModel.sortBy(.name)
+        default:
+            print(" Неизвестная сортировка: '\(sortOrder)'")
+        }
+    }
     
     //  ПОЛНОЕ ОБНОВЛЕНИЕ: reloadData() - вызывается только для skeleton, footer, удаления
     private func updateStateWithFullReload(_ state: CartViewState) {
@@ -421,16 +445,20 @@ final class CartViewController: UIViewController {
         //  Опции сортировки
         let sortByPriceAction = UIAlertAction(title: "По цене", style: .default) { _ in
             print("Сортировка по цене")
+            
+            FilterStorage.shared.chosenFilter = "price"
             self.viewModel.sortBy(.price)
         }
         
         let sortByRatingAction = UIAlertAction(title: "По рейтингу", style: .default) { _ in
             print("Сортировка по рейтингу")
+            FilterStorage.shared.chosenFilter = "rating"
             self.viewModel.sortBy(.rating)
         }
         
         let sortByNameAction = UIAlertAction(title: "По названию", style: .default) { _ in
             print("Сортировка по названию")
+            FilterStorage.shared.chosenFilter = "name"
             self.viewModel.sortBy(.name)
         }
         
@@ -470,18 +498,15 @@ final class CartViewController: UIViewController {
         
         //  Обновляем UI
         DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
+           
             // Перезагружаем таблицу (теперь она будет пустая)
-            self.tableView.reloadData()
+            self?.tableView.reloadData()
             
             // Обновляем empty state и footer
-            self.updateEmptyState(emptyState)
-            self.updateFooter(emptyState)
+            self?.updateEmptyState(emptyState)
+            self?.updateFooter(emptyState)
             
             print(" Корзина успешно очищена и показан empty state")
-            
-            
         }
     }
     

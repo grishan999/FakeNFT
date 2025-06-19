@@ -10,7 +10,7 @@ protocol NftService {
     func loadNft(id: String, completion: @escaping NftCompletion)
     func loadOrder(id: String, completion: @escaping OrderCompletion)
     func loadNftCartModel(id: String, completion: @escaping nftCartModelCompletion)
-    func changeOrPatOrder(nftIds: [String], completion: @escaping OrderCompletion)
+    func changeOrPaytOrder(nftIds: [String], completion: @escaping OrderCompletion)
     func loadCurrencies(completion : @escaping currenciesCompletion)
 }
 
@@ -80,7 +80,7 @@ final class NftServiceImpl: NftService {
         }
     }
     
-    func changeOrPatOrder(nftIds: [String], completion: @escaping OrderCompletion) {
+    func changeOrPaytOrder(nftIds: [String], completion: @escaping OrderCompletion) {
         let request = ChangeOrPayOrder(nftIds: nftIds)  // Передаем массив
         
         networkClient.send(request: request, type: Order.self) { [weak storage] result in

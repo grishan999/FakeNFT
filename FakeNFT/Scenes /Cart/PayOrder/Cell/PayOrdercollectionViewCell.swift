@@ -6,15 +6,8 @@ final class PayOrdercollectionViewCell: UICollectionViewCell {
     static let id = "PayOrdercollectionViewCell"
     
     func setSelected(_ selected: Bool) {
-        if selected {
-            //  Черная рамка 1 пиксель для выбранной ячейки
-            containerView.layer.borderWidth = 1.0
-            containerView.layer.borderColor = UIColor.black.cgColor
-        } else {
-            //  Убираем рамку для невыбранной ячейки
-            containerView.layer.borderWidth = 0.0
-            containerView.layer.borderColor = UIColor.clear.cgColor
-        }
+        containerView.layer.borderWidth = selected  ? 1.0  : 0.0
+        containerView.layer.borderColor = selected ? UIColor.black.cgColor : UIColor.clear.cgColor
     }
     
     func configure(with currency: Currency){
