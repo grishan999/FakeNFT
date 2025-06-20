@@ -51,12 +51,14 @@ final class NFTCollectionViewController: UIViewController {
         return label
     }()
     
-    private let authorNameLabel: UILabel = {
-        let label = UILabel()
-        label.font = .caption1
-        label.textColor = .systemBlue
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    private lazy var authorButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.titleLabel?.font = .caption1
+        button.setTitleColor(.systemBlue, for: .normal)
+        button.contentHorizontalAlignment = .left
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(authorButtonTapped), for: .touchUpInside)
+        return button
     }()
     
     private let descriptionLabel: UILabel = {
@@ -164,7 +166,7 @@ final class NFTCollectionViewController: UIViewController {
         
         contentView.addSubview(titleLabel)
         
-        let authorStack = UIStackView(arrangedSubviews: [authorTitleLabel, authorNameLabel])
+        let authorStack = UIStackView(arrangedSubviews: [authorTitleLabel, authorButton])
         authorStack.axis = .horizontal
         authorStack.spacing = 4
         authorStack.alignment = .firstBaseline
@@ -214,7 +216,7 @@ final class NFTCollectionViewController: UIViewController {
         coverImageView.isHidden = isHidden
         titleLabel.isHidden = isHidden
         authorTitleLabel.isHidden = isHidden
-        authorNameLabel.isHidden = isHidden
+        authorButton.isHidden = isHidden
         descriptionLabel.isHidden = isHidden
         collectionView.isHidden = isHidden
     }
@@ -227,7 +229,7 @@ final class NFTCollectionViewController: UIViewController {
         
         coverImageView.kf.setImage(with: collection.cover)
         titleLabel.text = collection.name
-        authorNameLabel.text = collection.author
+        authorButton.setTitle(collection.author, for: .normal)
         descriptionLabel.text = collection.description
         
         collectionView.reloadData()
@@ -266,6 +268,15 @@ final class NFTCollectionViewController: UIViewController {
     
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc private func authorButtonTapped() {
+        guard let url = URL(string: "https://practicum.yandex.ru/ios-developer/?from=catalog") else {
+            assertionFailure("Invalid URL")
+            return
+        }
+        let webViewController = AuthorWebView(url: url)
+        navigationController?.pushViewController(webViewController, animated: true)
     }
 }
 
