@@ -122,19 +122,19 @@ class MyNFTViewController: UIViewController {
             preferredStyle: .actionSheet
         )
         alertController.addAction(UIAlertAction(
-            title: localizedString(key: "sortingByPrice"),
+            title: localizedString(key: "По цене"),
             style: .default
         ) { _ in
             print("Сортировка по цене выбрана")
         })
         alertController.addAction(UIAlertAction(
-            title: localizedString(key: "sortingByRating"),
+            title: localizedString(key: "По рейтингу"),
             style: .default
         ) { _ in
             print("Сортировка по рейтингу выбрана")
         })
         alertController.addAction(UIAlertAction(
-            title: localizedString(key: "sortingByName"),
+            title: localizedString(key: "По названию"),
             style: .default
         ) { _ in
             self.viewModel?.sortByName()
