@@ -54,8 +54,16 @@
 		F476BEF72DF6FE0A00EEA2F3 /* nftCartRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BEF62DF6FE0A00EEA2F3 /* nftCartRequest.swift */; };
 		F476BEF92DF712CF00EEA2F3 /* NFTCellState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BEF82DF712CF00EEA2F3 /* NFTCellState.swift */; };
 		F476BEFF2DF7545300EEA2F3 /* DeleteConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BEFE2DF7545300EEA2F3 /* DeleteConfirmationViewController.swift */; };
-		F476BF012DF78C5900EEA2F3 /* ChangeOrderRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BF002DF78C5900EEA2F3 /* ChangeOrderRequest.swift */; };
+		F476BF012DF78C5900EEA2F3 /* ChangeOrPayOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BF002DF78C5900EEA2F3 /* ChangeOrPayOrder.swift */; };
 		F476BF032DF861F400EEA2F3 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BF022DF861DF00EEA2F3 /* ViewModel.swift */; };
+		F476BF082DFEFC0400EEA2F3 /* PayOrderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BF072DFEFBFA00EEA2F3 /* PayOrderViewController.swift */; };
+		F476BF0A2DFEFC7800EEA2F3 /* PayOrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BF092DFEFC6B00EEA2F3 /* PayOrderViewModel.swift */; };
+		F476BF0C2DFF042000EEA2F3 /* CurrenciesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BF0B2DFF041E00EEA2F3 /* CurrenciesModel.swift */; };
+		F476BF0E2DFF0C3600EEA2F3 /* CurrencyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BF0D2DFF0C3600EEA2F3 /* CurrencyRequest.swift */; };
+		F476BF782DFF3D5300EEA2F3 /* PayOrdercollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BF772DFF3D5300EEA2F3 /* PayOrdercollectionViewCell.swift */; };
+		F476BF7D2E0051D000EEA2F3 /* FilterStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BF7B2E0051D000EEA2F3 /* FilterStorage.swift */; };
+		F476BF7F2E0065CD00EEA2F3 /* WebViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BF7E2E0065C500EEA2F3 /* WebViewContoller.swift */; };
+		F476BF822E0182B300EEA2F3 /* SuccessPaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F476BF812E0182B300EEA2F3 /* SuccessPaymentViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -126,8 +134,16 @@
 		F476BEF62DF6FE0A00EEA2F3 /* nftCartRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nftCartRequest.swift; sourceTree = "<group>"; };
 		F476BEF82DF712CF00EEA2F3 /* NFTCellState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTCellState.swift; sourceTree = "<group>"; };
 		F476BEFE2DF7545300EEA2F3 /* DeleteConfirmationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteConfirmationViewController.swift; sourceTree = "<group>"; };
-		F476BF002DF78C5900EEA2F3 /* ChangeOrderRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeOrderRequest.swift; sourceTree = "<group>"; };
+		F476BF002DF78C5900EEA2F3 /* ChangeOrPayOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeOrPayOrder.swift; sourceTree = "<group>"; };
 		F476BF022DF861DF00EEA2F3 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		F476BF072DFEFBFA00EEA2F3 /* PayOrderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayOrderViewController.swift; sourceTree = "<group>"; };
+		F476BF092DFEFC6B00EEA2F3 /* PayOrderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayOrderViewModel.swift; sourceTree = "<group>"; };
+		F476BF0B2DFF041E00EEA2F3 /* CurrenciesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrenciesModel.swift; sourceTree = "<group>"; };
+		F476BF0D2DFF0C3600EEA2F3 /* CurrencyRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyRequest.swift; sourceTree = "<group>"; };
+		F476BF772DFF3D5300EEA2F3 /* PayOrdercollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayOrdercollectionViewCell.swift; sourceTree = "<group>"; };
+		F476BF7B2E0051D000EEA2F3 /* FilterStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterStorage.swift; sourceTree = "<group>"; };
+		F476BF7E2E0065C500EEA2F3 /* WebViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewContoller.swift; sourceTree = "<group>"; };
+		F476BF812E0182B300EEA2F3 /* SuccessPaymentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessPaymentViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -243,6 +259,7 @@
 		3F68069529CBBAF100B4F915 /* FakeNFT */ = {
 			isa = PBXGroup;
 			children = (
+				F476BF7A2E0051BE00EEA2F3 /* UserDefaults */,
 				3F68069629CBBAF100B4F915 /* AppDelegate.swift */,
 				3F68069829CBBAF100B4F915 /* SceneDelegate.swift */,
 				E1CD40DA2A96BE9B00BE7FE8 /* Resources */,
@@ -386,6 +403,7 @@
 		F476BE832DF5E9AB00EEA2F3 /* Cart */ = {
 			isa = PBXGroup;
 			children = (
+				F476BF062DFEFBC100EEA2F3 /* PayOrder */,
 				F476BF052DF8645000EEA2F3 /* NetworkRequests */,
 				F476BF042DF8643000EEA2F3 /* Cell */,
 				F476BF022DF861DF00EEA2F3 /* ViewModel.swift */,
@@ -408,10 +426,48 @@
 			isa = PBXGroup;
 			children = (
 				F476BEF22DF62DA700EEA2F3 /* OrderRequest.swift */,
-				F476BF002DF78C5900EEA2F3 /* ChangeOrderRequest.swift */,
+				F476BF002DF78C5900EEA2F3 /* ChangeOrPayOrder.swift */,
 				F476BEF62DF6FE0A00EEA2F3 /* nftCartRequest.swift */,
+				F476BF0D2DFF0C3600EEA2F3 /* CurrencyRequest.swift */,
 			);
 			path = NetworkRequests;
+			sourceTree = "<group>";
+		};
+		F476BF062DFEFBC100EEA2F3 /* PayOrder */ = {
+			isa = PBXGroup;
+			children = (
+				F476BF802E01828800EEA2F3 /* SuccessPaymentViewController */,
+				F476BF7E2E0065C500EEA2F3 /* WebViewContoller.swift */,
+				F476BF792DFF483400EEA2F3 /* Cell */,
+				F476BF0B2DFF041E00EEA2F3 /* CurrenciesModel.swift */,
+				F476BF092DFEFC6B00EEA2F3 /* PayOrderViewModel.swift */,
+				F476BF072DFEFBFA00EEA2F3 /* PayOrderViewController.swift */,
+			);
+			path = PayOrder;
+			sourceTree = "<group>";
+		};
+		F476BF792DFF483400EEA2F3 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				F476BF772DFF3D5300EEA2F3 /* PayOrdercollectionViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		F476BF7A2E0051BE00EEA2F3 /* UserDefaults */ = {
+			isa = PBXGroup;
+			children = (
+				F476BF7B2E0051D000EEA2F3 /* FilterStorage.swift */,
+			);
+			path = UserDefaults;
+			sourceTree = "<group>";
+		};
+		F476BF802E01828800EEA2F3 /* SuccessPaymentViewController */ = {
+			isa = PBXGroup;
+			children = (
+				F476BF812E0182B300EEA2F3 /* SuccessPaymentViewController.swift */,
+			);
+			path = SuccessPaymentViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -556,18 +612,23 @@
 			files = (
 				3FC8C38B29D242E90081F015 /* ProductDetailsTableViewCell.swift in Sources */,
 				3F478ECF29DB474E00F6D39E /* Colors.swift in Sources */,
+				F476BF082DFEFC0400EEA2F3 /* PayOrderViewController.swift in Sources */,
 				0C79EE662A76DDFF00EE90EA /* NftDetailViewController.swift in Sources */,
 				F476BE852DF5E9C200EEA2F3 /* CartViewController.swift in Sources */,
 				E1A1B9DA2AA01CE400C3AFBC /* TabBarController.swift in Sources */,
+				F476BF0E2DFF0C3600EEA2F3 /* CurrencyRequest.swift in Sources */,
 				3F478ED129DB476500F6D39E /* Fonts.swift in Sources */,
 				0C79EE6A2A76DE1000EE90EA /* NftDetailAssembly.swift in Sources */,
 				F476BE872DF5F87500EEA2F3 /* CartTableViewCell.swift in Sources */,
 				3FC8C39329D246BA0081F015 /* DateFormatters+Presets.swift in Sources */,
 				0CFCB7422A78013E0009A829 /* Nft.swift in Sources */,
+				F476BF0C2DFF042000EEA2F3 /* CurrenciesModel.swift in Sources */,
 				F476BEFF2DF7545300EEA2F3 /* DeleteConfirmationViewController.swift in Sources */,
 				0CF2C2DD2A783CE600FDC837 /* ErrorView.swift in Sources */,
 				0C79EE682A76DE0900EE90EA /* NftDetailPresenter.swift in Sources */,
+				F476BF0A2DFEFC7800EEA2F3 /* PayOrderViewModel.swift in Sources */,
 				3F68069B29CBBAF100B4F915 /* ProductDetailsTableViewController.swift in Sources */,
+				F476BF782DFF3D5300EEA2F3 /* PayOrdercollectionViewCell.swift in Sources */,
 				0CFCB7402A78002A0009A829 /* ExamplePutService.swift in Sources */,
 				3F6806D529CBBEC700B4F915 /* NetworkTask.swift in Sources */,
 				0CF2C2DB2A783C1B00FDC837 /* LoadingView.swift in Sources */,
@@ -578,7 +639,9 @@
 				0C79EE6C2A76DE2E00EE90EA /* ServicesAssemly.swift in Sources */,
 				F476BEF52DF631AC00EEA2F3 /* Order.swift in Sources */,
 				0CFCB74E2A7817DC0009A829 /* NftStorage.swift in Sources */,
-				F476BF012DF78C5900EEA2F3 /* ChangeOrderRequest.swift in Sources */,
+				F476BF7F2E0065CD00EEA2F3 /* WebViewContoller.swift in Sources */,
+				F476BF7D2E0051D000EEA2F3 /* FilterStorage.swift in Sources */,
+				F476BF012DF78C5900EEA2F3 /* ChangeOrPayOrder.swift in Sources */,
 				3FC8C39129D2453B0081F015 /* ExamplePutRequest.swift in Sources */,
 				0CFCB7462A78064B0009A829 /* NftDetailCellModel.swift in Sources */,
 				F476BEF72DF6FE0A00EEA2F3 /* nftCartRequest.swift in Sources */,
@@ -588,6 +651,7 @@
 				E19CD5AB2A98B56600CA39A5 /* NftImageCollectionViewCell.swift in Sources */,
 				0CF2C2E12A784C7000FDC837 /* LinePageControl.swift in Sources */,
 				F476BE822DF5E61200EEA2F3 /* nftCartModel.swift in Sources */,
+				F476BF822E0182B300EEA2F3 /* SuccessPaymentViewController.swift in Sources */,
 				3F6806D329CBBE9600B4F915 /* NetworkRequest.swift in Sources */,
 				0CFCB7492A7808900009A829 /* TestCatalogController.swift in Sources */,
 				F476BEF92DF712CF00EEA2F3 /* NFTCellState.swift in Sources */,

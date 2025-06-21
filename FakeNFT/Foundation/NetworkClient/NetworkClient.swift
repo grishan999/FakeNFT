@@ -119,14 +119,14 @@ struct DefaultNetworkClient: NetworkClient {
         urlRequest.httpMethod = request.httpMethod.rawValue
         urlRequest.addValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
 
-        // ✅ Логирование основной информации
+        //  Логирование основной информации
         print("🌐 === NETWORK REQUEST DEBUG ===")
         print("📍 URL: \(endpoint.absoluteString)")
         print("📋 Method: \(request.httpMethod.rawValue)")
         print("🔑 Token: \(RequestConstants.token)")
 
-        // ✅ Специальная логика для ChangeOrderRequest
-        if let changeOrderRequest = request as? ChangeOrderRequest {
+        //  Специальная логика для ChangeOrderRequest
+        if let changeOrderRequest = request as? ChangeOrPayOrder {
             print("🔄 ChangeOrderRequest detected")
             print("📦 NFT IDs: \(changeOrderRequest.nftIds)")
             
@@ -139,13 +139,13 @@ struct DefaultNetworkClient: NetworkClient {
             urlRequest.httpBody = bodyString.data(using: .utf8)
             urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             
-            // ✅ Логирование заголовков
+            //  Логирование заголовков
             print("🏷️ Headers:")
             urlRequest.allHTTPHeaderFields?.forEach { key, value in
                 print("   \(key): \(value)")
             }
             
-            // ✅ Логирование тела запроса
+            //  Логирование тела запроса
             if let bodyData = urlRequest.httpBody,
                let bodyString = String(data: bodyData, encoding: .utf8) {
                 print("📄 HTTP Body: \(bodyString)")
@@ -168,7 +168,7 @@ struct DefaultNetworkClient: NetworkClient {
             urlRequest.httpBody = urlComponents.query?.data(using: .utf8)
             urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             
-            // ✅ Логирование для обычных запросов
+            //  Логирование для обычных запросов
             print("🏷️ Headers:")
             urlRequest.allHTTPHeaderFields?.forEach { key, value in
                 print("   \(key): \(value)")

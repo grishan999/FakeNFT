@@ -60,7 +60,7 @@ class DeleteConfirmationViewController: UIViewController {
         //  Текст подтверждения
         setupTitleLabel()
         
-        // 📦 Контейнер для кнопок
+        //  Контейнер для кнопок
         setupButtonsContainer()
         
         //  Кнопка "Удалить" (черная)
@@ -79,7 +79,7 @@ class DeleteConfirmationViewController: UIViewController {
     }
     
     private func setupBlurBackground() {
-        // 🌀 Создаем blur эффект
+        //  Создаем blur эффект
         backgroundBlurView.effect = nil // Начинаем без эффекта для анимации
         backgroundBlurView.alpha = 0
     }

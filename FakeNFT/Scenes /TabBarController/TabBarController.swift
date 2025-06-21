@@ -24,17 +24,15 @@ final class TabBarController: UITabBarController {
             tag: 1
         )
         
-        // ✅ Используем новый CartViewModel вместо старого ViewModel
+        //  Используем новый CartViewModel вместо старого ViewModel
         let viewModel: CartViewModelProtocol = CartViewModel(servicesAssembly: servicesAssembly)
         
-        // ✅ Передаем ViewModel через протокол
+        //  Передаем ViewModel через протокол
         let cartController = CartViewController(
             servicesAssembly: servicesAssembly,
             viewModel: viewModel
         )
         
-        // ❌ УБИРАЕМ эту строку - теперь связи настраиваются через bindings
-        // viewModel.view = cartController
         
         let catalogController = TestCatalogViewController(
             servicesAssembly: servicesAssembly
@@ -48,7 +46,7 @@ final class TabBarController: UITabBarController {
         cartNavigationController.navigationBar.isTranslucent = true
         cartNavigationController.navigationBar.shadowImage = UIImage()
         
-        // ✅ Настройки для tab bar (ПОСЛЕ создания viewControllers)
+        //  Настройки для tab bar (ПОСЛЕ создания viewControllers)
               // активная иконка
         tabBar.unselectedItemTintColor = .black  // неактивные иконки
        

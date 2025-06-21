@@ -2,9 +2,15 @@ import Foundation
 import UIKit
 import ProgressHUD
 
+enum SortType: String, CaseIterable {
+    case price = "price"
+    case rating = "rating"
+    case name = "name"
+}
+
 //  Единая структура состояния - все данные для View в одном месте
 struct CartViewState {
-    let cellStates: [NFTCellState]
+    var cellStates: [NFTCellState]
     let doneLoading: Bool
     let footerInfo: FooterInfo?
     
@@ -53,7 +59,7 @@ final class CartViewController: UIViewController {
     private lazy var nftCountLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -89,6 +95,17 @@ final class CartViewController: UIViewController {
         return indicator
     }()
     
+    private lazy var emptyCartLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Корзина пуста"
+        label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        label.textColor = .black
+        label.textAlignment = .center
+        label.isHidden = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     // MARK: - Init
     
     init(servicesAssembly: ServicesAssembly, viewModel: CartViewModelProtocol) {
@@ -115,6 +132,37 @@ final class CartViewController: UIViewController {
         viewModel.viewDidLoad()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        //viewModel.viewDidLoad()
+    }
+    
+    private func setupEmptyCartLabel() {
+        view.addSubview(emptyCartLabel)
+        
+        NSLayoutConstraint.activate([
+            emptyCartLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyCartLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyCartLabel.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 16),
+            emptyCartLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -16)
+        ])
+    }
+    
+    private func updateEmptyState(_ state: CartViewState) {
+        let shouldShowEmptyLabel = state.doneLoading && state.cellStates.isEmpty
+        
+        //  Показываем/скрываем "Корзина пуста"
+        emptyCartLabel.isHidden = !shouldShowEmptyLabel
+        
+        //  Скрываем/показываем footer при пустой корзине
+        footerView.isHidden = shouldShowEmptyLabel
+        
+        //  Скрываем/показываем tableView при пустой корзине
+        tableView.isHidden = shouldShowEmptyLabel
+        
+        print("🛒 Empty state: \(shouldShowEmptyLabel)")
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         ProgressHUD.dismiss()
@@ -137,6 +185,7 @@ final class CartViewController: UIViewController {
         // ОБНОВЛЕНИЕ FOOTER: только footer, никаких reloadData()
         viewModel.onFooterUpdated = { [weak self] state in
             self?.updateFooterOnly(state)
+               self?.sortNfts()
         }
         
         //  Подписываемся на ошибки
@@ -148,13 +197,43 @@ final class CartViewController: UIViewController {
         viewModel.onShowDeleteConfirmation = { [weak self] nftID, imageURL in
             self?.showDeleteConfirmation(nftID: nftID, imageURL: imageURL)
         }
+        
+        // Подписываемся на получение сортированного массива
+        viewModel.onGetSortedNfts = { [weak self] nftsArray in
+            self?.currentState.cellStates = nftsArray
+            self?.tableView.reloadData()
+        }
+        
+        
     }
     
     // MARK: - State Updates
     
+    private func sortNfts(){
+        guard let sortOrder = FilterStorage.shared.chosenFilter else { return }
+        
+        switch sortOrder {
+        case "price":
+            viewModel.sortBy(.price)
+        case "rating":
+            viewModel.sortBy(.rating)
+        case "name":
+            viewModel.sortBy(.name)
+        default:
+            print(" Неизвестная сортировка: '\(sortOrder)'")
+        }
+    }
+    
     //  ПОЛНОЕ ОБНОВЛЕНИЕ: reloadData() - вызывается только для skeleton, footer, удаления
     private func updateStateWithFullReload(_ state: CartViewState) {
         print(" ПОЛНОЕ обновление: reloadData()")
+        
+        if state.cellStates.isEmpty {
+            ProgressHUD.dismiss()
+            footerView.isHidden = true
+            emptyCartLabel.isHidden = false
+            return
+        }
         
         currentState = state
         
@@ -164,7 +243,7 @@ final class CartViewController: UIViewController {
         // 3. Удаление NFT
         tableView.reloadData()
         
-        // 🦶 Обновляем footer на основе нового состояния
+        //  Обновляем footer на основе нового состояния
         updateFooter(state)
         
         //  Скрываем прогресс после получения данных
@@ -195,7 +274,7 @@ final class CartViewController: UIViewController {
             // Ячейка не видна - она обновится автоматически при появлении
         }
         
-        // 🦶 Обновляем footer (может измениться при загрузке NFT)
+        //  Обновляем footer (может измениться при загрузке NFT)
         updateFooter(state)
         
         //  Скрываем прогресс после получения данных
@@ -204,11 +283,11 @@ final class CartViewController: UIViewController {
     
     //  ОБНОВЛЕНИЕ FOOTER: только footer, никаких reloadData()
     private func updateFooterOnly(_ state: CartViewState) {
-        print("🦶 ОБНОВЛЕНИЕ только footer")
+        print(" ОБНОВЛЕНИЕ только footer")
         
         currentState = state
         
-        // 🦶 Обновляем только footer
+        //  Обновляем только footer
         updateFooter(state)
         
         //  Скрываем прогресс после получения данных
@@ -217,6 +296,8 @@ final class CartViewController: UIViewController {
     
     //  Обновляем footer на основе состояния
     private func updateFooter(_ state: CartViewState) {
+        updateEmptyState(state)
+        
         if state.doneLoading == false {
             //  Показываем shimmer во время загрузки
             showFooterShimmer()
@@ -255,12 +336,12 @@ final class CartViewController: UIViewController {
             nftID: nftID,
             nftImageURL: imageURL,
             onDelete: { [weak self] confirmedNFTID in
-                print("🎯 Подтверждено удаление NFT: \(confirmedNFTID)")
+                print(" Подтверждено удаление NFT: \(confirmedNFTID)")
                 //  Делегируем выполнение удаления ViewModel
                 self?.viewModel.confirmRemoveItem(nftID: confirmedNFTID)
             },
             onCancel: { cancelledNFTID in
-                print("❌ Отменено удаление NFT: \(cancelledNFTID)")
+                print(" Отменено удаление NFT: \(cancelledNFTID)")
             }
         )
     }
@@ -277,6 +358,7 @@ final class CartViewController: UIViewController {
         addSubviews()
         setupConstraints()
         setupNavigationBar()
+        setupEmptyCartLabel()
     }
     
     private func setupNavigationBar() {
@@ -354,11 +436,78 @@ final class CartViewController: UIViewController {
     // MARK: - Actions
     
     @objc private func menuButtonTapped() {
-        print("Menu button tapped")
+        showSortingActionSheet()
+    }
+    
+    private func showSortingActionSheet() {
+        let alertController = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
+        
+        //  Опции сортировки
+        let sortByPriceAction = UIAlertAction(title: "По цене", style: .default) { _ in
+            print("Сортировка по цене")
+            
+            FilterStorage.shared.chosenFilter = "price"
+            self.viewModel.sortBy(.price)
+        }
+        
+        let sortByRatingAction = UIAlertAction(title: "По рейтингу", style: .default) { _ in
+            print("Сортировка по рейтингу")
+            FilterStorage.shared.chosenFilter = "rating"
+            self.viewModel.sortBy(.rating)
+        }
+        
+        let sortByNameAction = UIAlertAction(title: "По названию", style: .default) { _ in
+            print("Сортировка по названию")
+            FilterStorage.shared.chosenFilter = "name"
+            self.viewModel.sortBy(.name)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Закрыть", style: .cancel) { _ in
+            print("Отменена сортировка")
+        }
+        
+        //  Добавляем действия в алерт
+        alertController.addAction(sortByPriceAction)
+        alertController.addAction(sortByRatingAction)
+        alertController.addAction(sortByNameAction)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true)
     }
     
     @objc private func payButtonTapped() {
-        print("Pay button tapped")
+        print("payButtonTapped")
+        let payOrderViewModel = PayOrderViewModel(servicesAssembly: servicesAssembly, nfts: currentState.cellStates)
+        let payOrderVC = PayOrderViewController(viewModel: payOrderViewModel)
+        payOrderViewModel.view = payOrderVC
+        
+        
+        let navVC = UINavigationController(rootViewController: payOrderVC)
+        
+        navVC.modalPresentationStyle = .fullScreen
+        
+        
+        self.present(navVC, animated: true)
+    }
+    
+    func updateCartToEmptyState(_ emptyState: CartViewState) {
+        print("🧹 Прямое обновление CartViewController до пустого состояния")
+        
+        //  Обновляем внутреннее состояние
+        currentState = emptyState
+        
+        //  Обновляем UI
+        DispatchQueue.main.async { [weak self] in
+           
+            // Перезагружаем таблицу (теперь она будет пустая)
+            self?.tableView.reloadData()
+            
+            // Обновляем empty state и footer
+            self?.updateEmptyState(emptyState)
+            self?.updateFooter(emptyState)
+            
+            print(" Корзина успешно очищена и показан empty state")
+        }
     }
     
     // MARK: - Shimmer Animation
