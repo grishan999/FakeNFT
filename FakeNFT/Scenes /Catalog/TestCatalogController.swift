@@ -25,7 +25,7 @@ final class TestCatalogViewController: UIViewController {
         testNftButton.constraintCenters(to: view)
         testNftButton.setTitle(Constants.openNftTitle, for: .normal)
         testNftButton.addTarget(self, action: #selector(showNft), for: .touchUpInside)
-        testNftButton.setTitleColor(.systemBlue, for: .normal)
+        testNftButton.setTitleColor(.blueUniversal, for: .normal)
     }
 
     @objc
