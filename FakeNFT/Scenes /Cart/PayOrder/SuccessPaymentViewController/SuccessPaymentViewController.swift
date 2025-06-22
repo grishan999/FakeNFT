@@ -1,7 +1,6 @@
 import UIKit
 
 final class SuccessPaymentViewController: UIViewController {
-    
     // MARK: - UI Elements
     private lazy var successImageView: UIImageView = {
         let imageView = UIImageView()
@@ -76,13 +75,13 @@ final class SuccessPaymentViewController: UIViewController {
         
         //  Получаем TabBarController из SceneDelegate
         if let tabBarController = getTabBarControllerFromSceneDelegate() {
-            print("🎯 Найден TabBarController из SceneDelegate")
+            print("Найден TabBarController из SceneDelegate")
             
             //  CartViewController находится во второй вкладке (index 1)
             if let cartNavController = tabBarController.viewControllers?[1] as? UINavigationController,
                let cartVC = cartNavController.viewControllers.first as? CartViewController {
                 
-                print("🛒 Найден CartViewController в TabBar")
+                print("Найден CartViewController в TabBar")
                 
                 //  Создаем пустое состояние корзины
                 let emptyState = CartViewState(

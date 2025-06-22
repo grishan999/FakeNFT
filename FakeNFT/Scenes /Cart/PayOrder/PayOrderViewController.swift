@@ -12,6 +12,15 @@ final class PayOrderViewController: UIViewController, PayOrderViewControllerProt
     }
     
     @objc func payButtonTapped() {
+        if selectedIndexPath == nil {
+            let alertPresenter = UIAlertController(title: "Пожалуйста, выберите валюту для оплаты", message: nil, preferredStyle: .alert)
+            self.present(alertPresenter, animated: true)
+            let ok = UIAlertAction(title: "Ясно!", style: .default) { action in
+                alertPresenter.dismiss(animated: true)
+            }
+            alertPresenter.addAction(ok)
+            return
+        }
         ProgressHUD.show()
         viewModel.payOrderButtonPressed { result in
             switch result{
@@ -120,7 +129,6 @@ final class PayOrderViewController: UIViewController, PayOrderViewControllerProt
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .black
-        button.isEnabled = false
         button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(payButtonTapped), for: .touchUpInside)
@@ -204,7 +212,7 @@ final class PayOrderViewController: UIViewController, PayOrderViewControllerProt
         agreementLabel.addGestureRecognizer(tapGesture)
     }
     
-    // ДОБАВЬ ЭТОТ МЕТОД для обработки клика:
+    //:
     
     @objc private func agreementLabelTapped(_ gesture: UITapGestureRecognizer) {
         guard let text = agreementLabel.attributedText?.string else { return }
@@ -304,8 +312,6 @@ extension PayOrderViewController: UICollectionViewDelegate, UICollectionViewData
         
         // Устанавливаем новую выбранную ячейку
         selectedIndexPath = indexPath
-        
-        payButton.isEnabled = selectedIndexPath != nil
         
         if let currentCell = collectionView.cellForItem(at: indexPath) as? PayOrdercollectionViewCell {
             currentCell.setSelected(true)
