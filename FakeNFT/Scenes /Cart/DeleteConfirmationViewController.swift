@@ -1,7 +1,7 @@
 import UIKit
 import Kingfisher
 
-// 🎯 КАСТОМНЫЙ VIEWCONTROLLER ДЛЯ ПОДТВЕРЖДЕНИЯ УДАЛЕНИЯ С ID
+// КАСТОМНЫЙ VIEWCONTROLLER ДЛЯ ПОДТВЕРЖДЕНИЯ УДАЛЕНИЯ С ID
 class DeleteConfirmationViewController: UIViewController {
     
     // MARK: - Properties

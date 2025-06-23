@@ -32,6 +32,7 @@ final class CartViewController: UIViewController {
     
     private let servicesAssembly: ServicesAssembly
     private let viewModel: CartViewModelProtocol
+    private var hasViewLoaded = false
     
     //  View хранит только текущее состояние для отображения
     private var currentState: CartViewState = .initial
@@ -127,6 +128,7 @@ final class CartViewController: UIViewController {
         ProgressHUD.show("Загрузка корзины...")
         setupUI()
         updateFooter(currentState)
+        hasViewLoaded = true
         
         //  Просто сообщаем ViewModel что View готово
         viewModel.viewDidLoad()
@@ -134,7 +136,9 @@ final class CartViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        //viewModel.viewDidLoad()
+        if hasViewLoaded {
+            viewModel.viewDidLoad()
+        }
     }
     
     private func setupEmptyCartLabel() {
