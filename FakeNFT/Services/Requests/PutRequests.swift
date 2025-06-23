@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Foundation
 
 struct LikeRequest: NetworkRequest {
     let likes: [String]
