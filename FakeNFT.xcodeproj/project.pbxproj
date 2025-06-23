@@ -198,13 +198,6 @@
 		0CFCB7472A7808870009A829 /* Catalog */ = {
 			isa = PBXGroup;
 			children = (
-				BC06D98D2E035C29000849FD /* AuthorWebView.swift */,
-				BC813E692DF9F85600739EE0 /* NFTCollectionViewModel.swift */,
-				BC813E672DF9F84600739EE0 /* NFTCollectionCell.swift */,
-				BC813E652DF9F83400739EE0 /* NFTCollectionViewController.swift */,
-				BC813CBB2DF0E72200739EE0 /* CatalogCell.swift */,
-				BC813CB92DEF852C00739EE0 /* CatalogViewModel.swift */,
-				BC813CB52DEF357B00739EE0 /* CatalogViewController.swift */,
 			);
 			path = Catalog;
 			sourceTree = "<group>";
@@ -249,6 +242,7 @@
 		3F68069529CBBAF100B4F915 /* FakeNFT */ = {
 			isa = PBXGroup;
 			children = (
+				BCD8FAC62E098D530062427C /* SceneCatalog */,
 				3F68069629CBBAF100B4F915 /* AppDelegate.swift */,
 				3F68069829CBBAF100B4F915 /* SceneDelegate.swift */,
 				E1CD40DA2A96BE9B00BE7FE8 /* Resources */,
@@ -361,6 +355,20 @@
 				0C79EE602A76DCD600EE90EA /* NftByIdRequest.swift */,
 			);
 			path = Requests;
+			sourceTree = "<group>";
+		};
+		BCD8FAC62E098D530062427C /* SceneCatalog */ = {
+			isa = PBXGroup;
+			children = (
+				BC06D98D2E035C29000849FD /* AuthorWebView.swift */,
+				BC813E692DF9F85600739EE0 /* NFTCollectionViewModel.swift */,
+				BC813E672DF9F84600739EE0 /* NFTCollectionCell.swift */,
+				BC813E652DF9F83400739EE0 /* NFTCollectionViewController.swift */,
+				BC813CBB2DF0E72200739EE0 /* CatalogCell.swift */,
+				BC813CB92DEF852C00739EE0 /* CatalogViewModel.swift */,
+				BC813CB52DEF357B00739EE0 /* CatalogViewController.swift */,
+			);
+			path = SceneCatalog;
 			sourceTree = "<group>";
 		};
 		E19CD5A92A98B55900CA39A5 /* Cell */ = {
