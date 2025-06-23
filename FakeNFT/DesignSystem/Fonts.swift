@@ -12,6 +12,7 @@ extension UIFont {
     // Body Fonts
     static var bodyRegular = UIFont.systemFont(ofSize: 17, weight: .regular)
     static var bodyBold = UIFont.systemFont(ofSize: 17, weight: .bold)
+    static var costMedium = UIFont.systemFont(ofSize: 12, weight: .medium)
 
     // Caption Fonts
     static var caption1 = UIFont.systemFont(ofSize: 15, weight: .regular)
