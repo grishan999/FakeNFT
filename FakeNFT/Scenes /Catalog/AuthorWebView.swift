@@ -47,7 +47,7 @@ final class AuthorWebView: UIViewController {
         let backButton = UIButton(type: .custom)
         backButton.setImage(UIImage(named: "nav_back"), for: .normal)
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
-        backButton.frame = CGRect(x: 0, y: 0, width: 24, height: 23)
+        backButton.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
         
         let backButtonItem = UIBarButtonItem(customView: backButton)
         
