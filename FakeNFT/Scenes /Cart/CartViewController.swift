@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import ProgressHUD
 
-enum SortTypeCATALOGversion: String, CaseIterable {
+enum SortTypeCart: String, CaseIterable {
     case price = "price"
     case rating = "rating"
     case name = "name"

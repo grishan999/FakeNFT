@@ -34,7 +34,7 @@ final class CatalogViewController: UIViewController {
     private func setupNavigationBar() {
         title = nil
         
-        let image = UIImage(named: "SortCatalog")?.withRenderingMode(.alwaysOriginal)
+        let image = UIImage(named: "MenuButton")?.withRenderingMode(.alwaysOriginal)
         let filterButton = UIBarButtonItem(
             image: image,
             style: .plain,

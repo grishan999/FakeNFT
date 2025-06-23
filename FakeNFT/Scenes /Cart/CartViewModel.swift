@@ -12,14 +12,14 @@ protocol CartViewModelProtocol: AnyObject {
     func viewDidLoad()
     func removeItemRequested(nftID: String)
     func confirmRemoveItem(nftID: String)
-    func sortBy(_ type: SortType)
+    func sortBy(_ type: SortTypeCart)
 }
 
 // MARK: - ViewModel
 
 final class CartViewModel: CartViewModelProtocol {
    
-    func sortBy(_ type: SortType) {
+    func sortBy(_ type: SortTypeCart) {
         switch type {
             
         case .price:

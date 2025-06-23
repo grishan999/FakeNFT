@@ -25,7 +25,7 @@ final class NftServiceImpl: NftService {
     }
 
     func loadOrder(id: String, completion: @escaping OrderCompletion) {
-        let request = OrderRequest(id: id)
+        let request = OrderRequest()
         
         networkClient.send(request: request, type: Order.self) { [weak storage] result in
             switch result {
