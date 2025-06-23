@@ -5,7 +5,7 @@
 //  Created by Ilya Grishanov on 03.06.2025.
 //
 
-enum SortType: String {
+enum SortTypeCATALOGversion: String {
     case byName
     case byCount
     case none
@@ -45,7 +45,7 @@ final class CatalogViewModel {
             guard let rawValue = UserDefaults.standard.string(forKey: sortTypeKey) else {
                 return .none
             }
-            let type = SortType(rawValue: rawValue) ?? .none
+            let type = SortTypeCATALOGversion(rawValue: rawValue) ?? .none
             return type
         }
         set {
