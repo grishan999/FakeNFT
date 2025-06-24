@@ -99,11 +99,11 @@ final class CartViewModel: CartViewModelProtocol {
         DispatchQueue.main.async { [weak self] in
             if let changedIndex = changedIndex {
                 //  ТОЧЕЧНОЕ ОБНОВЛЕНИЕ: вызываем только onStateChangedWithIndex
-                print("🎯 Оптимизация: изменилась ячейка с индексом \(changedIndex)")
+                print(" Оптимизация: изменилась ячейка с индексом \(changedIndex)")
                 self?.onStateChangedWithIndex?(state, changedIndex)
             } else {
                 //  ПОЛНОЕ ОБНОВЛЕНИЕ: вызываем только onStateChanged
-                print("🔄 Полное обновление: reloadData()")
+                print("Полное обновление: reloadData()")
                 self?.onStateChanged?(state)
             }
         }
@@ -137,7 +137,7 @@ final class CartViewModel: CartViewModelProtocol {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let order):
-                    print("📦 Loaded order with \(order.nfts.count) NFTs")
+                    print(" Loaded order with \(order.nfts.count) NFTs")
                     self?.createSkeletonCells(for: order.nfts)
                     self?.loadNFTsData(ids: order.nfts)
                 case .failure(let error):
@@ -151,7 +151,7 @@ final class CartViewModel: CartViewModelProtocol {
     private func createSkeletonCells(for nftIDs: [String]) {
         let skeletonStates = nftIDs.map { NFTCellState.loading(id: $0) }
         updateAllCellStates(skeletonStates)  //  changedIndex = nil → reloadData()
-        print("🔄 Created \(nftCellStates.count) skeleton cells - ЕДИНСТВЕННЫЙ reloadData()")
+        print(" Created \(nftCellStates.count) skeleton cells - ЕДИНСТВЕННЫЙ reloadData()")
     }
     
     //  Загружаем данные для каждой NFT параллельно
@@ -189,7 +189,7 @@ final class CartViewModel: CartViewModelProtocol {
         guard index < nftCellStates.count else { return }
         
         //  ДОПОЛНИТЕЛЬНОЕ ЛОГГИРОВАНИЕ для диагностики
-        print("🔄 Обновляем ячейку \(index): \(newState.id)")
+        print(" Обновляем ячейку \(index): \(newState.id)")
         if case .loaded(let nft) = newState {
             print("📸 NFT загружен: \(nft.name), imageURL: \(nft.imageURL?.absoluteString ?? "nil")")
         }
@@ -219,7 +219,7 @@ final class CartViewModel: CartViewModelProtocol {
                 self?.onFooterUpdated?(state)  //  Только footer, никаких reloadData()
             }
             
-            print("🎉 All NFTs loaded! - только footer обновлен")
+            print(" All NFTs loaded! - только footer обновлен")
         }
     }
     
@@ -241,9 +241,9 @@ final class CartViewModel: CartViewModelProtocol {
         let currentNftIds = nftCellStates.map { $0.id }
         let filteredNftIds = currentNftIds.filter { $0 != nftID }
         
-        print("🗑️ Удаляем NFT \(nftID)")
-        print("📋 Было NFT: \(currentNftIds)")
-        print("📋 Стало NFT: \(filteredNftIds)")
+        print(" Удаляем NFT \(nftID)")
+        print(" Было NFT: \(currentNftIds)")
+        print(" Стало NFT: \(filteredNftIds)")
         
         //  Отправляем запрос на сервер
         servicesAssembly.nftService.changeOrPaytOrder(nftIds: filteredNftIds) { [weak self] result in

@@ -1,5 +1,10 @@
 import Foundation
 
+protocol CustomQueryStringDto: Dto {
+    func asQueryString() -> String
+}
+
+
 struct ChangeOrPayOrder: NetworkRequest {
     let nftIds: [String]
     
@@ -17,17 +22,16 @@ struct ChangeOrPayOrder: NetworkRequest {
 }
 
 // MARK: - DTO для ChangeOrPayOrder
-struct ChangeOrPayOrderDto: Dto {
+struct ChangeOrPayOrderDto: CustomQueryStringDto {
     let nftIds: [String]
     
+    //  Обязательный метод от Dto (не используется)
     func asDictionary() -> [String: String] {
-        // Создаем словарь где каждый nftId становится отдельным параметром nfts
-        var dictionary: [String: String] = [:]
-        
-        for (index, nftId) in nftIds.enumerated() {
-            dictionary["nfts[\(index)]"] = nftId
-        }
-        
-        return dictionary
+        return [:] // Пустой - используем asQueryString()
+    }
+    
+    //  Специальный метод для формирования повторяющихся параметров
+    func asQueryString() -> String {
+        return nftIds.map { "nfts=\($0)" }.joined(separator: "&")
     }
 }

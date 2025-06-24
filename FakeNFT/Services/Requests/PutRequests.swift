@@ -84,3 +84,4 @@ struct ProfileResponse: Decodable {
 struct OrderResponse: Decodable {
     let nfts: [String]
 }
+

@@ -117,10 +117,16 @@ struct DefaultNetworkClient: NetworkClient {
 
         var urlRequest = URLRequest(url: endpoint)
         urlRequest.httpMethod = request.httpMethod.rawValue
-
         urlRequest.addValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
 
-        if let dtoDictionary = request.dto?.asDictionary() {
+        
+        // !!!!!!! ДОБАВЛЯЕМ только одну проверку
+        if let customDto = request.dto as? CustomQueryStringDto {
+            let queryString = customDto.asQueryString()
+            urlRequest.httpBody = queryString.data(using: .utf8)
+            urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
+        } else if let dtoDictionary = request.dto?.asDictionary() {
             var urlComponents = URLComponents()
             let queryItems = dtoDictionary.map { field in
                 URLQueryItem(
