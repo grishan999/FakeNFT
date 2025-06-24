@@ -25,7 +25,7 @@ final class ProfileViewController: UIViewController {
         )
     )
     
-    // MARK: - Private Priorities
+    // MARK: - UI Elements
     private lazy var changeProfileButton: UIButton = {
         let button = UIButton()
         if let imageButton = UIImage(named: "edit_button")?.withRenderingMode(.alwaysTemplate) {
@@ -89,9 +89,7 @@ final class ProfileViewController: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .backgroudColor
-        configureView()
-        setupNavigationBar()
+        setupView()
         setupBindings()
     }
     
@@ -109,6 +107,7 @@ final class ProfileViewController: UIViewController {
     private func profileLinkTapped() {
         print("Переходим по ссылке")
     }
+    
     private func setupBindings() {
         viewModel.profileUpdated = { [weak self] in
             self?.nameLabel.text = self?.viewModel.userName
@@ -120,13 +119,22 @@ final class ProfileViewController: UIViewController {
     private func handleAction(_ action: ProfileAction) {
         switch action {
         case .navigateToMyNFTs:
-            print("Переходим на экран Мои NFT")
+            let myNFTVC = MyNFTViewController()
+            myNFTVC.viewModel = viewModel
+            myNFTVC.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(myNFTVC, animated: true)
             
         case .navigateToFavorites:
-            print("Переходим на экран Избранные NFT")
+            let favoritesVC = FavoriteNFTViewController()
+            favoritesVC.viewModel = viewModel
+            favoritesVC.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(favoritesVC, animated: true)
             
-        case .openUserWebsite:
-            print("Переходим на экран О разработчике")
+        case .openUserWebsite(let url):
+            let webViewController = AboutDeveloperViewController()
+            webViewController.urlString = url
+            webViewController.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(webViewController, animated: true)
         default:
             break
         }
@@ -171,6 +179,12 @@ extension ProfileViewController: ViewConfigurable {
             tableView
         ]
         subViews.forEach { view.addSubview($0) }
+    }
+    
+    private func setupView() {
+        view.backgroundColor = .backgroudColor
+        configureView()
+        setupNavigationBar()
     }
 }
 
