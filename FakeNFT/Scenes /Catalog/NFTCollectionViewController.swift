@@ -152,7 +152,7 @@ final class NFTCollectionViewController: UIViewController {
             scrollView.topAnchor.constraint(equalTo: coverImageView.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor) 
         ])
         
         scrollView.addSubview(contentView)
