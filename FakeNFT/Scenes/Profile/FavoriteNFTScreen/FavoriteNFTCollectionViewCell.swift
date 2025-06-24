@@ -115,6 +115,7 @@ extension FavoriteNFTCollectionViewCell {
         ratingImage: UIImage?
     ) {
         // TODO:
+        
     }
 }
 
