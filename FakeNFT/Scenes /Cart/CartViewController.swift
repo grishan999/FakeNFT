@@ -366,28 +366,16 @@ final class CartViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        navigationItem.title = ""
+        title = nil
         
-        let menuButton = UIButton(type: .system)
-        menuButton.setImage(UIImage(named: "MenuButton"), for: .normal)
-        menuButton.tintColor = .black
-        menuButton.addTarget(self, action: #selector(menuButtonTapped), for: .touchUpInside)
-        
-        //  Создаем контейнер с отступами
-        let containerView = UIView()
-        containerView.addSubview(menuButton)
-        
-        menuButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            menuButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 5),
-            menuButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            menuButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
-            menuButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -5),
-            containerView.widthAnchor.constraint(equalToConstant: 42),
-            containerView.heightAnchor.constraint(equalToConstant: 42)
-        ])
-        
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: containerView)
+        let image = UIImage(named: "MenuButton")?.withRenderingMode(.alwaysOriginal)
+        let filterButton = UIBarButtonItem(
+            image: image,
+            style: .plain,
+            target: self,
+            action: #selector(menuButtonTapped)
+        )
+        navigationItem.rightBarButtonItem = filterButton
     }
     
     private func addSubviews() {
