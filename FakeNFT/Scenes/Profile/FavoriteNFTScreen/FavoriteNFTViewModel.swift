@@ -122,11 +122,13 @@ extension FavoriteNFTViewModel: ProfileViewModelDelegate {
         userName: String?,
         userDescription: String?,
         userWebsite: String?
-    ) {}
+    ) {  // TODO:
+    }
     
     func didReceiveMyNFT(
         myNFT: [String]?
-    ) {}
+    ) {// TODO:
+    }
     
     func didReceiveFavoriteNFT(
         favoriteNFT: [String]?

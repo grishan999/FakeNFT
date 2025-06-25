@@ -129,6 +129,10 @@ final class ProfileChangeViewController: UIViewController {
         textField.layer.cornerRadius = 12
         textField.layer.masksToBounds = true
         textField.translatesAutoresizingMaskIntoConstraints = false
+        
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
+            textField.leftView = paddingView
+            textField.leftViewMode = .always
         return textField
     }()
     
@@ -150,6 +154,13 @@ final class ProfileChangeViewController: UIViewController {
         textView.layer.masksToBounds = true
         textView.isScrollEnabled = true
         textView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Устанавливаем внутренние отступы для текста
+        textView.textContainerInset = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
+        
+        // Убираем дополнительный отступ по умолчанию
+        textView.textContainer.lineFragmentPadding = 0
+        
         return textView
     }()
     
@@ -170,6 +181,12 @@ final class ProfileChangeViewController: UIViewController {
         textField.layer.cornerRadius = 12
         textField.layer.masksToBounds = true
         textField.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Добавляем отступ слева для текста 
+            let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
+            textField.leftView = leftPaddingView
+            textField.leftViewMode = .always
+
         return textField
     }()
     

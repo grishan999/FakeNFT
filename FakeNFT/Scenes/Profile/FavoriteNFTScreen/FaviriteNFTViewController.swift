@@ -118,7 +118,7 @@ final class FavoriteNFTViewController: UIViewController {
     
     private func updateCellLoadingNFT() {
         viewModel.nftsImageUpdate = { [weak self] nftId, image in
-            guard let self = self else { return }
+            guard let self else { return }
             
             if let index = self.likedNFTs.firstIndex(where: { $0.id == nftId }) {
                 let indexPath = IndexPath(item: index, section: 0)

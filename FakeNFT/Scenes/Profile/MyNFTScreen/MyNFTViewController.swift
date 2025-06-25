@@ -114,34 +114,35 @@ class MyNFTViewController: UIViewController {
     
     private func showSortingAlert() {
         let alertController = UIAlertController(
-            title: localizedString(key: "sorting"),
+            title: NSLocalizedString("sorting.title", value: "Сортировка", comment: "Sorting alert title"),
             message: nil,
             preferredStyle: .actionSheet
         )
         alertController.addAction(UIAlertAction(
-            title: localizedString(key: "sortingByPrice"),
+            title: NSLocalizedString("sorting.byPrice", value: "По цене", comment: "Sort by price action"),
             style: .default
         ) { _ in
             self.viewModel.sortByPrice()
             self.tableView.reloadData()
         })
         alertController.addAction(UIAlertAction(
-            title: localizedString(key: "sortingByRating"),
+            title: NSLocalizedString("sorting.byRating", value: "По рейтингу", comment: "Sort by rating action"),
             style: .default
         ) { _ in
             self.viewModel.sortByRating()
             self.tableView.reloadData()
         })
         alertController.addAction(UIAlertAction(
-            title: localizedString(key: "sortingByName"),
+            title: NSLocalizedString("sorting.byName", value: "По названию", comment: "Sort by name action"),
             style: .default
         ) { _ in
             self.viewModel.sortByName()
             self.tableView.reloadData()
         })
         alertController.addAction(UIAlertAction(
-            title: localizedString(key: "close"),
-            style: .cancel, handler: nil
+            title: NSLocalizedString("general.close", value: "Закрыть", comment: "Close button"),
+            style: .cancel,
+            handler: nil
         ))
         present(alertController, animated: true, completion: nil)
     }

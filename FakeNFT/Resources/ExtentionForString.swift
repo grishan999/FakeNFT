@@ -19,9 +19,7 @@ extension String {
             )
         )
         
-        if let range = results?.range(
-            at: 1
-        ) {
+        if let range = results?.range(at: 1) {
             return nsString.substring(
                 with: range
             )
