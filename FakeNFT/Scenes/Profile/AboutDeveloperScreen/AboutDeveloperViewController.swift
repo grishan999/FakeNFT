@@ -6,11 +6,16 @@ final class AboutDeveloperViewController: UIViewController {
     private lazy var backButton: UIButton = {
         let button = UIButton()
         if let imageButton = UIImage(named: "back_button")?.withRenderingMode(.alwaysTemplate) {
-            button.setImage(imageButton, for: .normal)
+            button.setImage(
+                imageButton,
+                for: .normal
+            )
             button.tintColor = .buttonColor
-            button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
-            // Переворачиваем сразу
-            button.imageView?.transform = CGAffineTransform(rotationAngle: .pi)
+            button.addTarget(
+                self,
+                action: #selector(didTapBackButton),
+                for: .touchUpInside
+            )
         }
         button.widthAnchor.constraint(equalToConstant: 24).isActive = true
         button.heightAnchor.constraint(equalToConstant: 24).isActive = true
@@ -22,14 +27,18 @@ final class AboutDeveloperViewController: UIViewController {
     var urlString: String?
     
     private lazy var webView: WKWebView = {
-        let webView = WKWebView(frame: self.view.bounds)
+        let webView = WKWebView(
+            frame: self.view.bounds
+        )
         webView.navigationDelegate = self
         webView.translatesAutoresizingMaskIntoConstraints = false
         return webView
     }()
     
     private lazy var progressView: UIProgressView = {
-        let progressView = UIProgressView(progressViewStyle: .default)
+        let progressView = UIProgressView(
+            progressViewStyle: .default
+        )
         progressView.translatesAutoresizingMaskIntoConstraints = false
         progressView.isHidden = true
         return progressView
@@ -66,7 +75,9 @@ final class AboutDeveloperViewController: UIViewController {
         change: [NSKeyValueChangeKey : Any]?,
         context: UnsafeMutableRawPointer?
     ) {
-        if keyPath == #keyPath(WKWebView.estimatedProgress) {
+        if keyPath == #keyPath(
+            WKWebView.estimatedProgress
+        ) {
             updateProgress()
         } else {
             super.observeValue(
@@ -77,6 +88,7 @@ final class AboutDeveloperViewController: UIViewController {
             )
         }
     }
+    
     // MARK: - Private Methods
     @objc
     private func didTapBackButton() {
@@ -88,7 +100,10 @@ final class AboutDeveloperViewController: UIViewController {
     }
     
     private func loadURL() {
-        guard let urlString = urlString, let url = URL(string: urlString) else {
+        guard let urlString = urlString,
+              let url = URL(
+                string: urlString
+              ) else {
             print("Некорректный URL")
             return
         }
@@ -132,11 +147,18 @@ extension AboutDeveloperViewController: ViewConfigurable {
 
 // MARK: - WKNavigationDelegate
 extension AboutDeveloperViewController: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+    func webView(
+        _ webView: WKWebView,
+        didFinish navigation: WKNavigation!
+    ) {
         updateProgress()
     }
     
-    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+    func webView(
+        _ webView: WKWebView,
+        didFail navigation: WKNavigation!,
+        withError error: Error
+    ) {
         updateProgress()
         print("Ошибка загрузки: \(error.localizedDescription)")
     }

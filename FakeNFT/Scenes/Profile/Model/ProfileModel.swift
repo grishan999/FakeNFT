@@ -1,9 +1,13 @@
 import Foundation
 
-struct ProfileModel {
-    var profileImage: String
-    var userName: String
-    var userDescription: String
-    var userWebsite: String
+// MARK: - ProfileModel
+struct ProfileModel: Decodable {
+    var name: String
+    var avatar: String
+    var description: String
+    var website: String
+    var nfts: [String]
+    var likes: [String]
+    let id: String
 }
 

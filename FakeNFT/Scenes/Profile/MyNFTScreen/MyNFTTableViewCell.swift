@@ -16,7 +16,10 @@ final class MyNFTTableViewCell: UITableViewCell {
     private lazy var likeButton: UIButton = {
         let button = UIButton()
         if let imageButton = UIImage(named: "heart") {
-            button.setImage(imageButton, for: .normal)
+            button.setImage(
+                imageButton,
+                for: .normal
+            )
         }
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -32,16 +35,12 @@ final class MyNFTTableViewCell: UITableViewCell {
     
     private lazy var starsImageView: UIImageView = {
         let imageView = UIImageView()
-        if let arrowImage = UIImage(named: "rating_2") {
-            imageView.image = arrowImage
-        }
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
     private lazy var fromLabel: UILabel = {
         let label = UILabel()
-        label.text = "от John Doe"
         label.textColor = .fontColor
         label.font = .caption2
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -50,7 +49,7 @@ final class MyNFTTableViewCell: UITableViewCell {
     
     private lazy var payLabel: UILabel = {
         let label = UILabel()
-        label.text = "цена"
+        label.text = localizedString(key: "price")
         label.textColor = .fontColor
         label.font = .caption2
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -59,7 +58,6 @@ final class MyNFTTableViewCell: UITableViewCell {
     
     private lazy var countMoneyLabel: UILabel = {
         let label = UILabel()
-        label.text = "1,78 ETH"
         label.textColor = .fontColor
         label.font = .bodyBold
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -67,18 +65,29 @@ final class MyNFTTableViewCell: UITableViewCell {
     }()
     
     // MARK: - Initializers
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+    override init(
+        style: UITableViewCell.CellStyle,
+        reuseIdentifier: String?
+    ) {
+        super.init(
+            style: style,
+            reuseIdentifier: reuseIdentifier
+        )
         selectionStyle = .none
         backgroundColor = .backgroudColor
-        separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        separatorInset = UIEdgeInsets(
+            top: 0,
+            left: 16,
+            bottom: 0,
+            right: 16
+        )
         layer.maskedCorners = []
-        
         configureView()
     }
     
-    required init?(coder: NSCoder) {
+    required init?(
+        coder: NSCoder
+    ) {
         fatalError("init(coder:) has not been implemented")
     }
 }
@@ -132,6 +141,20 @@ extension MyNFTTableViewCell: ViewConfigurable {
     func configureView() {
         addSubviews()
         addConstraints()
+    }
+}
+
+extension MyNFTTableViewCell {
+    func configure(
+        with nft: Nft,
+        image: UIImage?,
+        ratingImage: UIImage?
+    ) {
+        self.countMoneyLabel.text = "\(nft.price) ETH"
+        self.nftImageView.image = image ?? UIImage(named: "placeholder")
+        self.starsImageView.image = ratingImage ?? UIImage(named: "rating_0")
+        self.nameLabel.text = nft.name
+        self.fromLabel.text = "\(localizedString(key: "from")) \(nft.originalName)"
     }
 }
 

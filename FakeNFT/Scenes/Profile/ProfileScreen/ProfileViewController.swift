@@ -1,29 +1,45 @@
 import UIKit
-import SwiftUI
-
-// MARK: - Preview
-struct ProfileViewControllerPreview: PreviewProvider {
-    static var previews: some View {
-        ProfileViewController().showPreview()
-    }
-}
 
 final class ProfileViewController: UIViewController {
     
     // MARK: - ViewModel
-    private let viewModel = ProfileViewModel(
-        profile: ProfileModel(
-            profileImage: "user_pic",
-            userName: "Joaquin Phoenix",
-            userDescription: """
-            Дизайнер из Казани, люблю цифровое искусство
-            и бейглы. В моей коллекции уже 100+ NFT,
-            и еще больше — на моём сайте. Открыт
-            к коллаборациям.
-            """,
-            userWebsite: "Joaquin Phoenix.com"
+    private let viewModel: ProfileViewModel
+    private var profileChangeViewModel: ProfileChangeViewModel
+    private let myNFTViewModel: MyNFTViewModel
+    private let favoriteNFTViewModel: FavoriteNFTViewModel
+    
+    init(viewModel: ProfileViewModel,
+         profileChangeViewModel: ProfileChangeViewModel,
+         networkClient: NetworkClient,
+         storage: NftStorage) {
+        let nftService = NftServiceImpl(
+            networkClient: networkClient,
+            storage: storage
         )
-    )
+        let profileService = ProfileService(
+            networkClient: networkClient
+        )
+        
+        self.profileChangeViewModel = ProfileChangeViewModel(
+            profileService: profileService
+        )
+        
+        self.myNFTViewModel = MyNFTViewModel(
+            nftService: nftService
+        )
+        
+        self.favoriteNFTViewModel = FavoriteNFTViewModel(
+            nftService: nftService
+        )
+        
+        self.viewModel = viewModel
+        self.profileChangeViewModel = profileChangeViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - UI Elements
     private lazy var changeProfileButton: UIButton = {
@@ -38,7 +54,7 @@ final class ProfileViewController: UIViewController {
     }()
     
     private lazy var profileImage: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: viewModel.profileImage))
+        let imageView = UIImageView()
         imageView.layer.cornerRadius = 35
         imageView.layer.masksToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -70,7 +86,11 @@ final class ProfileViewController: UIViewController {
         button.setTitle(viewModel.userWebsite, for: .normal)
         button.titleLabel?.font = .caption1
         button.setTitleColor(.blueUniversal, for: .normal)
-        button.addTarget(self, action: #selector(profileLinkTapped), for: .touchUpInside)
+        button.addTarget(
+            self,
+            action: #selector(profileLinkTapped),
+            for: .touchUpInside
+        )
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -82,7 +102,10 @@ final class ProfileViewController: UIViewController {
         tableView.backgroundColor = .backgroudColor
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(ProfileTableViewCell.self, forCellReuseIdentifier: ProfileTableViewCell.identifier)
+        tableView.register(
+            ProfileTableViewCell.self,
+            forCellReuseIdentifier: ProfileTableViewCell.identifier
+        )
         return tableView
     }()
     
@@ -91,42 +114,97 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupBindings()
+        viewModel.loadProfile()
     }
+    
+    override func viewWillAppear(
+        _ animated: Bool
+    ) {
+        super.viewWillAppear(animated)
+        setupBindings()
+        viewModel.loadProfile()
+    }
+    
     
     // MARK: - Private Methods
     private func setupNavigationBar() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: changeProfileButton)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            customView: changeProfileButton
+        )
     }
     
     @objc
     private func didTapChangeButton() {
-        print("Изменяем профиль")
+        let profileChangeViewController = ProfileChangeViewController(
+            viewModel: profileChangeViewModel,
+            newProfileViewModel: viewModel
+        )
+        setupBindings()
+        viewModel.loadProfile()
+        present(
+            profileChangeViewController,
+            animated: true,
+            completion: nil
+        )
     }
     
-    @objc
-    private func profileLinkTapped() {
-        print("Переходим по ссылке")
+    @objc private func profileLinkTapped() {
+        if !viewModel.userWebsite.isEmpty,
+           let url = URL(
+            string: viewModel.userWebsite
+           ) {
+            UIApplication.shared.open(
+                url,
+                options: [:],
+                completionHandler: nil
+            )
+        } else {
+            print("Некорректный URL")
+        }
     }
     
+    // MARK: - Setup Methods
     private func setupBindings() {
+        updateScreenInformation()
+        updateImage()
+    }
+    
+    private func updateScreenInformation() {
         viewModel.profileUpdated = { [weak self] in
-            self?.nameLabel.text = self?.viewModel.userName
-            self?.informationLabel.text = self?.viewModel.userDescription
-            self?.profileLink.setTitle(self?.viewModel.userWebsite, for: .normal)
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                self.nameLabel.text = self.viewModel.userName
+                self.informationLabel.text = self.viewModel.userDescription
+                self.profileLink.setTitle(self.viewModel.userWebsite, for: .normal)
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    private func updateImage() {
+        viewModel.profileImageUpdated = { [weak self] (image: UIImage?) in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                self.profileImage.image = image
+            }
         }
     }
     
     private func handleAction(_ action: ProfileAction) {
         switch action {
         case .navigateToMyNFTs:
-            let myNFTVC = MyNFTViewController()
-            myNFTVC.viewModel = viewModel
+            let myNFTVC = MyNFTViewController(
+                viewModel: myNFTViewModel,
+                newProfileViewModel: viewModel
+            )
             myNFTVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(myNFTVC, animated: true)
             
         case .navigateToFavorites:
-            let favoritesVC = FavoriteNFTViewController()
-            favoritesVC.viewModel = viewModel
+            let favoritesVC = FavoriteNFTViewController(
+                viewModel: favoriteNFTViewModel,
+                newProfileViewModel: viewModel
+            )
             favoritesVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(favoritesVC, animated: true)
             
@@ -161,7 +239,7 @@ extension ProfileViewController: ViewConfigurable {
             informationLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
             profileLink.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            profileLink.topAnchor.constraint(equalTo: informationLabel.bottomAnchor, constant: 8),
+            profileLink.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 190),
             
             tableView.topAnchor.constraint(equalTo: profileLink.bottomAnchor, constant: 40),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -190,21 +268,29 @@ extension ProfileViewController: ViewConfigurable {
 
 // MARK: - UITableViewDataSource
 extension ProfileViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(
+        _ tableView: UITableView,
+        numberOfRowsInSection section: Int
+    ) -> Int {
         return viewModel.items.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.identifier, for: indexPath) as? ProfileTableViewCell else {
+    func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath
+    ) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: ProfileTableViewCell.identifier,
+            for: indexPath
+        )
+                as? ProfileTableViewCell else
+        {
             return UITableViewCell()
         }
         
         let item = viewModel.items[indexPath.row]
-        if let count = item.count {
-            cell.configure(with: item.categoryName, count: "\(count)")
-        } else {
-            cell.configure(with: item.categoryName, count: nil)
-        }
+        cell.configure(with: item.categoryName,
+                       count: item.count != nil ? "\(item.count!)" : nil)
         return cell
     }
 }
@@ -212,14 +298,19 @@ extension ProfileViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 extension ProfileViewController: UITableViewDelegate {
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(
+        _ tableView: UITableView,
+        heightForRowAt indexPath: IndexPath
+    ) -> CGFloat {
         return 54
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(
+        _ tableView: UITableView,
+        didSelectRowAt indexPath: IndexPath
+    ) {
         let action = viewModel.didSelectItem(at: indexPath.row)
         handleAction(action)
     }
 }
-
 

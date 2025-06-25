@@ -8,7 +8,33 @@ final class TabBarController: UITabBarController {
     }
     
     private func generateTabBar() {
-        let profileViewController = UINavigationController(rootViewController: ProfileViewController())
+        let networkClient = DefaultNetworkClient()
+        let storage = NftStorageImpl()
+        
+        let profileService = ProfileService(
+            networkClient: networkClient
+        )
+        let nftService = NftServiceImpl(
+            networkClient: networkClient,
+            storage: storage
+        )
+        
+        let profileViewModel = ProfileViewModel(
+            profileService: profileService
+        )
+        
+        let profileChangeViewModel = ProfileChangeViewModel(
+            profileService: profileService
+        )
+        
+        let profileViewController = UINavigationController(
+            rootViewController: ProfileViewController(
+                viewModel: profileViewModel,
+                profileChangeViewModel: profileChangeViewModel,
+                networkClient: networkClient,
+                storage: storage
+            )
+        )
         let catalogViewController = UINavigationController(rootViewController: CatalogViewController())
         let cartViewController = UINavigationController(rootViewController: CartViewController())
         let statisticsViewController = UINavigationController(rootViewController: StatisticsViewController())
@@ -35,14 +61,23 @@ final class TabBarController: UITabBarController {
         ]
     }
     
-    private func generateVC(viewController: UIViewController, title: String, image: UIImage?) -> UIViewController {
+    private func generateVC(
+        viewController: UIViewController,
+        title: String,
+        image: UIImage?
+    ) -> UIViewController {
         viewController.tabBarItem.title = title
         viewController.tabBarItem.image = image
         
         let attributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10, weight: .medium)]
-        viewController.tabBarItem.setTitleTextAttributes(attributes, for: .normal)
-        viewController.tabBarItem.setTitleTextAttributes(attributes, for: .selected)
-        
+        viewController.tabBarItem.setTitleTextAttributes(
+            attributes,
+            for: .normal
+        )
+        viewController.tabBarItem.setTitleTextAttributes(
+            attributes,
+            for: .selected
+        )
         return viewController
     }
 }
