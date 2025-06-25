@@ -22,21 +22,21 @@ final class ProfileTableViewCell: UITableViewCell {
     }()
     
     private lazy var transitionImageView: UIImageView = {
-        let imageView = UIImageView()
-        if let arrowImage = UIImage(
-            named: "back_button"
-        ) {
-            imageView.image = arrowImage.withRenderingMode(
-                .alwaysTemplate
-            )
-            imageView.tintColor = .buttonColor
-        }
-        imageView.transform = CGAffineTransform(
-            rotationAngle: .pi
-        )
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }()
+            let imageView = UIImageView()
+            if let arrowImage = UIImage(named: "back_button") {
+                imageView.image = arrowImage.withRenderingMode(.alwaysTemplate)
+                imageView.tintColor = .buttonColor
+            }
+            imageView.contentMode = .scaleAspectFit
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            
+            NSLayoutConstraint.activate([
+                imageView.widthAnchor.constraint(equalToConstant: 7.98),
+                imageView.heightAnchor.constraint(equalToConstant: 13.86)
+            ])
+            
+            return imageView
+        }()
     
     // MARK: - Initializers
     override init(

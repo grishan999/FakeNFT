@@ -16,6 +16,7 @@ final class AboutDeveloperViewController: UIViewController {
                 action: #selector(didTapBackButton),
                 for: .touchUpInside
             )
+            button.imageView?.transform = CGAffineTransform(rotationAngle: .pi)
         }
         button.widthAnchor.constraint(equalToConstant: 24).isActive = true
         button.heightAnchor.constraint(equalToConstant: 24).isActive = true

@@ -173,6 +173,14 @@ final class ProfileChangeViewController: UIViewController {
         return textField
     }()
     
+    //MARK: - Public Priorites
+    var onDismiss: (() -> Void)?
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        onDismiss?()
+    }
+    
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -419,5 +427,9 @@ extension ProfileChangeViewController: ViewConfigurable {
             websiteTextField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
         ])
     }
+}
+
+extension ProfileChangeViewController {
+    
 }
 

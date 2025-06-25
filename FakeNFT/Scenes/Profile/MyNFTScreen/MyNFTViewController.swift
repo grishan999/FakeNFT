@@ -28,24 +28,19 @@ class MyNFTViewController: UIViewController {
     
     //MARK: - UI Elements
     private lazy var backButton: UIButton = {
-        let button = UIButton()
-        if let imageButton = UIImage(named: "back_button")?.withRenderingMode(.alwaysTemplate) {
-            button.setImage(
-                imageButton,
-                for: .normal
-            )
-            button.tintColor = .buttonColor
-            button.addTarget(
-                self,
-                action: #selector(didTapBackButton),
-                for: .touchUpInside
-            )
-        }
-        button.widthAnchor.constraint(equalToConstant: 24).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 24).isActive = true
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+            let button = UIButton()
+            if let imageButton = UIImage(named:"back_button")?.withRenderingMode(.alwaysTemplate) {
+                // Создаем четкое перевернутое изображение
+                let rotatedImage = imageButton.withHorizontallyFlippedOrientation()
+                button.setImage(rotatedImage, for: .normal)
+                button.tintColor = .buttonColor
+                button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
+            }
+            button.widthAnchor.constraint(equalToConstant: 24).isActive = true
+            button.heightAnchor.constraint(equalToConstant: 24).isActive = true
+            button.translatesAutoresizingMaskIntoConstraints = false
+            return button
+        }()
     
     private lazy var sortingButton: UIButton = {
         let button = UIButton()

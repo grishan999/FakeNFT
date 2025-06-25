@@ -27,24 +27,19 @@ final class FavoriteNFTViewController: UIViewController {
     
     // MARK: - UI Elements
     private lazy var backButton: UIButton = {
-        let button = UIButton()
-        if let imageButton = UIImage(named: "back_button")?.withRenderingMode(.alwaysTemplate) {
-            button.setImage(
-                imageButton,
-                for: .normal
-            )
-            button.tintColor = .buttonColor
-            button.addTarget(
-                self,
-                action: #selector(didTapBackButton),
-                for: .touchUpInside
-            )
-        }
-        button.widthAnchor.constraint(equalToConstant: 24).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 24).isActive = true
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+            let button = UIButton()
+            if let imageButton = UIImage(named: "back_button")?.withRenderingMode(.alwaysTemplate) {
+                // Переворачиваем изображение на 180 градусов
+                let flippedImage = imageButton.withHorizontallyFlippedOrientation()
+                button.setImage(flippedImage, for: .normal)
+                button.tintColor = .buttonColor
+                button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
+            }
+            button.widthAnchor.constraint(equalToConstant: 24).isActive = true
+            button.heightAnchor.constraint(equalToConstant: 24).isActive = true
+            button.translatesAutoresizingMaskIntoConstraints = false
+            return button
+        }()
     
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
