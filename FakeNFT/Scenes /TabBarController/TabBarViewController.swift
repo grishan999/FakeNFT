@@ -4,19 +4,15 @@ final class TabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        generateTabBar()
+        setupProfileTab()
     }
     
-    private func generateTabBar() {
+    private func setupProfileTab() {
         let networkClient = DefaultNetworkClient()
         let storage = NftStorageImpl()
         
         let profileService = ProfileService(
             networkClient: networkClient
-        )
-        let nftService = NftServiceImpl(
-            networkClient: networkClient,
-            storage: storage
         )
         
         let profileViewModel = ProfileViewModel(
@@ -35,29 +31,16 @@ final class TabBarController: UITabBarController {
                 storage: storage
             )
         )
-        let catalogViewController = UINavigationController(rootViewController: CatalogViewController())
-        let cartViewController = UINavigationController(rootViewController: CartViewController())
-        let statisticsViewController = UINavigationController(rootViewController: StatisticsViewController())
         
         tabBar.tintColor = .blueUniversal
         tabBar.unselectedItemTintColor = .buttonColor
+        
         viewControllers = [
-            generateVC(viewController: profileViewController,
-                       title: NSLocalizedString("profile", comment: ""),
-                       image: UIImage(named: "profile_tab")
-                      ),
-            generateVC(viewController: catalogViewController,
-                       title: NSLocalizedString("catalog", comment: ""),
-                       image: UIImage(named: "catalog_tab")
-                      ),
-            generateVC(viewController: cartViewController,
-                       title: NSLocalizedString("cart", comment: ""),
-                       image: UIImage(named: "cart_tab")
-                      ),
-            generateVC(viewController: statisticsViewController,
-                       title: NSLocalizedString("statistics", comment: ""),
-                       image: UIImage(named: "stats_tab")
-                      )
+            generateVC(
+                viewController: profileViewController,
+                title: NSLocalizedString("profile", comment: ""),
+                image: UIImage(named: "profile_tab")
+            )
         ]
     }
     
@@ -70,15 +53,9 @@ final class TabBarController: UITabBarController {
         viewController.tabBarItem.image = image
         
         let attributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10, weight: .medium)]
-        viewController.tabBarItem.setTitleTextAttributes(
-            attributes,
-            for: .normal
-        )
-        viewController.tabBarItem.setTitleTextAttributes(
-            attributes,
-            for: .selected
-        )
+        viewController.tabBarItem.setTitleTextAttributes(attributes, for: .normal)
+        viewController.tabBarItem.setTitleTextAttributes(attributes, for: .selected)
+        
         return viewController
     }
 }
-
