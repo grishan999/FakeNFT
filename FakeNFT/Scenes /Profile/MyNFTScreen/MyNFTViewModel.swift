@@ -14,7 +14,7 @@ final class MyNFTViewModel {
     }
     
     var nftImageUrl: String {
-        return nft?.images.first ?? ""
+        return nft?.images.first?.absoluteString ?? ""
     }
     
     var nftsUpdated: (() -> Void)?
@@ -66,7 +66,7 @@ final class MyNFTViewModel {
     }
     
     func loadNFTImage(for nft: Nft) {
-        guard let imageURL = URL(string: nftImageUrl) else { return }
+        guard let imageURL = nft.images.first else { return } 
         
         KingfisherManager.shared.retrieveImage(with: imageURL) { [weak self] result in
             guard let self = self else { return }
@@ -75,7 +75,17 @@ final class MyNFTViewModel {
                 self.nftImages[nft.id] = value.image
                 
                 if let index = self.nfts.firstIndex(where: { $0.id == nft.id }) {
-                    self.nfts[index].name = nftImageUrl.extractNFTName(from: nftImageUrl) ?? nft.originalName
+                    let oldNFT = self.nfts[index]
+                    let newNFT = Nft(
+                        id: oldNFT.id,
+                        images: oldNFT.images,
+                        name: nftImageUrl.extractNFTName(from: nftImageUrl) ?? oldNFT.name,
+                        rating: oldNFT.rating,
+                        description: oldNFT.description,
+                        price: oldNFT.price,
+                        author: oldNFT.author
+                    )
+                    self.nfts[index] = newNFT  // Заменяем старый NFT новым
                 }
                 self.nftsImageUpdate?(nft.id, value.image)
                 

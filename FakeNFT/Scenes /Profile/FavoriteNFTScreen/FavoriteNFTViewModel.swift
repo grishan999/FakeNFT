@@ -14,7 +14,7 @@ final class FavoriteNFTViewModel {
     }
     
     var nftImageUrl: String {
-        return nft?.images.first ?? ""
+        return nft?.images.first?.absoluteString ?? ""
     }
     
     var nftsUpdated: (() -> Void)?
@@ -65,45 +65,36 @@ final class FavoriteNFTViewModel {
         }
     }
     
-    func loadNFTImage
-    (for nft: Nft
-    ) {
-        guard let imageURL = URL(
-            string: nftImageUrl
-        ) else { return }
-        
-        KingfisherManager.shared.retrieveImage(
-            with: imageURL
-        ) {
-            [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let value):
-                self.nftImages[nft.id] = value.image
-                
-                if let index = self.likedNFTs.firstIndex(
-                    where: { $0.id == nft.id }
-                ) {
-                    self.likedNFTs[index].name = nftImageUrl.extractNFTName(
-                        from: nftImageUrl
-                    ) ?? nft.originalName
+    func loadNFTImage(for nft: Nft) {
+            guard let imageURL = nft.images.first else { return } 
+
+            KingfisherManager.shared.retrieveImage(with: imageURL) { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success(let value):
+                    self.nftImages[nft.id] = value.image
+
+                    if let index = self.likedNFTs.firstIndex(where: { $0.id == nft.id }) {
+                        let oldNFT = self.likedNFTs[index]
+                        let newNFT = Nft(
+                            id: oldNFT.id,
+                            images: oldNFT.images,
+                            name: nftImageUrl.extractNFTName(from: nftImageUrl) ?? oldNFT.name,
+                            rating: oldNFT.rating,
+                            description: oldNFT.description,
+                            price: oldNFT.price,
+                            author: oldNFT.author
+                        )
+                        self.likedNFTs[index] = newNFT
+                    }
+                    self.nftsImageUpdate?(nft.id, value.image)
+
+                case .failure(let error):
+                    print("Ошибка загрузки изображения NFT: \(error)")
+                    self.nftsImageUpdate?(nft.id, nil)
                 }
-                self.nftsImageUpdate?(
-                    nft.id,
-                    value.image
-                )
-                
-            case .failure(
-                let error
-            ):
-                print("Ошибка загрузки изображения NFT: \(error)")
-                self.nftsImageUpdate?(
-                    nft.id,
-                    nil
-                )
             }
         }
-    }
     
     func ratingImage(
         for nft: Nft
@@ -136,4 +127,3 @@ extension FavoriteNFTViewModel: ProfileViewModelDelegate {
         self.favoriteNFT = favoriteNFT
     }
 }
-

@@ -154,7 +154,7 @@ extension MyNFTTableViewCell {
         self.nftImageView.image = image ?? UIImage(named: "placeholder")
         self.starsImageView.image = ratingImage ?? UIImage(named: "rating_0")
         self.nameLabel.text = nft.name
-        self.fromLabel.text = "\(localizedString(key: "from")) \(nft.originalName)"
+        self.fromLabel.text = "\(localizedString(key: "from")) \(nft.name)"
     }
 }
 
