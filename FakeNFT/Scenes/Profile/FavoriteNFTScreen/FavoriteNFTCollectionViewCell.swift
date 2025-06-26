@@ -114,7 +114,10 @@ extension FavoriteNFTCollectionViewCell {
         image: UIImage?,
         ratingImage: UIImage?
     ) {
-        // TODO:
+        self.countMoneyLabel.text = "\(nft.price) ETH"
+        self.nftImageView.image = image ?? UIImage(named: "placeholder")
+        self.starsImageView.image = ratingImage ?? UIImage(named: "rating_0")
+        self.nameLabel.text = nft.name
     }
 }
 

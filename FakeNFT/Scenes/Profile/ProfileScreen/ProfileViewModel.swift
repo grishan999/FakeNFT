@@ -1,45 +1,117 @@
 import UIKit
+import Kingfisher
+
+protocol ProfileViewModelDelegate: AnyObject {
+    func didReceiveProfileData(
+        profileImageURL: String?,
+        userName: String?,
+        userDescription: String?,
+        userWebsite: String?
+    )
+    
+    func didReceiveMyNFT(
+        myNFT: [String]?
+    )
+    func didReceiveFavoriteNFT(
+        favoriteNFT: [String]?
+    )
+}
 
 final class ProfileViewModel {
     
+    // MARK: - Dependencies
+    private let profileService: ProfileServiceProtocol
+    weak var delegate: ProfileViewModelDelegate?
+    
     // MARK: - Public Properties
-    var profile: ProfileModel {
+    var profile: ProfileModel? {
         didSet {
             profileUpdated?()
         }
     }
     
-    var profileImage: String {
-        return profile.profileImage
+    var profileImageUrl: String {
+        profile?.avatar ?? ""
     }
     
     var userName: String {
-        return profile.userName
+        profile?.name ?? ""
     }
     
     var userDescription: String {
-        return profile.userDescription
+        profile?.description ?? ""
     }
     
     var userWebsite: String {
-        return profile.userWebsite
+        profile?.website ?? ""
     }
     
-    var profileUpdated: (() -> Void)?
-    
-    // MARK: - Data for UITable
     var items: [ProfileItem] = []
-    var myNFTNames: [String] = ["Piper","Archie","Zeus", "Lucky"]
-    var favoriteNFTNames: [String] = ["Piper","Archie","Zeus", "Lucky", "Piper","Archie"]
+    var myNFT: [String] = []
+    var favoriteNFT: [String] = []
+    var nftImages: [String: UIImage] = [:]
+    
+    //MARK: - Callbacks
+    var profileUpdated: (() -> Void)?
+    var profileImageUpdated: ((UIImage?) -> Void)?
     
     // MARK: - Initializer
-    init(profile: ProfileModel) {
-        self.profile = profile
-        self.items = [
-            ProfileItem(categoryName: localizedString(key: "myNFT"), count: myNFTNames.count),
-            ProfileItem(categoryName: localizedString(key: "favoriteNFT"), count: favoriteNFTNames.count),
-            ProfileItem(categoryName: localizedString(key: "aboutTheDeveloper"))
-        ]
+    init(
+        profileService: ProfileServiceProtocol
+    ) {
+        self.profileService = profileService
+    }
+    
+    // MARK: - Data Loading
+    func loadProfile() {
+        profileService.loadProfile { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let profile):
+                self.profile = profile
+                print(self.userName)
+                self.myNFT = profile.nfts
+                self.delegate?.didReceiveMyNFT(myNFT: myNFT)
+                self.favoriteNFT = profile.likes
+                self.loadProfileImage()
+                self.items = [
+                    ProfileItem(
+                        categoryName: localizedString(key: "myNFT"),
+                        count: profile.nfts.count
+                    ),
+                    ProfileItem(
+                        categoryName: localizedString(key: "favoriteNFT"),
+                        count: profile.likes.count
+                    ),
+                    ProfileItem(
+                        categoryName: localizedString(key: "aboutTheDeveloper")
+                    )
+                ]
+                self.profileUpdated?()
+            case .failure(let error):
+                print("Ошибка загрузки профиля: \(error)")
+            }
+        }
+    }
+    
+    func loadProfileImage() {
+        guard let imageURL = URL(string: profileImageUrl) else {
+            print("Некорректный URL: \(profileImageUrl)")
+            return
+        }
+        KingfisherManager.shared.retrieveImage(with: imageURL) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let value):
+                self.profileImageUpdated?(value.image)
+            case .failure(let error):
+                print("Ошибка загрузки изображения: \(error)")
+                if case .processorError(let reason) = error {
+                    print("Ошибка процессора: \(reason)")
+                }
+                self.profileImageUpdated?(nil)
+            }
+        }
     }
     
     // MARK: - Логика обработки нажатий на ячейки
@@ -50,29 +122,38 @@ final class ProfileViewModel {
         case 1:
             return .navigateToFavorites
         case 2:
-            return .openUserWebsite(url: "https://practicum.yandex.ru/ios-developer/?from=catalog")
+            return .openUserWebsite(url: userWebsite)
         default:
             return .none
         }
     }
+    //MARK: - Method Delegate
     
-    func configureNFT(for index: Int, from source: NFTSource) -> (image: UIImage?, name: String) {
-        let nftName: String
+    func fetchProfileData() {
+        let profileImageURL = profileImageUrl
+        let userName = userName
+        let userDescription = userDescription
+        let userWebsite = userWebsite
         
-        switch source {
-        case .myNFT:
-            nftName = myNFTNames[index]
-        case .favoriteNFT:
-            nftName = favoriteNFTNames[index]
-        }
-        let nftImage = UIImage(named: nftName)
-        
-        return (image: nftImage, name: nftName)
+        delegate?.didReceiveProfileData(
+            profileImageURL: profileImageURL,
+            userName: userName,
+            userDescription: userDescription,
+            userWebsite: userWebsite
+        )
     }
     
-    func sortByName() {
-        myNFTNames.sort()
+    func fetchNFTData() {
+        let myNFT = myNFT
+        delegate?.didReceiveMyNFT(
+            myNFT: myNFT
+        )
+    }
+    
+    func fetchFavoriteNFTData() {
+        let favoriteNFT = favoriteNFT
+        delegate?.didReceiveFavoriteNFT(
+            favoriteNFT: favoriteNFT
+        )
     }
 }
-
-
