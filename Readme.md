@@ -197,3 +197,15 @@
 - экран «Корзина» — по названию;
 - экран «Мои NFT» — по рейтингу;
 - экран «Статистика» — по рейтингу.
+
+
+## 🎥 Скринкасты
+
+### 1. Корзина
+![Демонстрация работы корзины](https://raw.githubusercontent.com/grishan999/FakeNFT/develop/ScreenCasts/Cart.gif)
+
+### 2. Каталог
+![Демонстрация каталога](https://raw.githubusercontent.com/grishan999/FakeNFT/develop/ScreenCasts/Catalog.gif)
+
+### 3. Профиль
+![Демонстрация профиля](https://raw.githubusercontent.com/grishan999/FakeNFT/develop/ScreenCasts/Profile.gif)
