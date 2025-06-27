@@ -25,8 +25,14 @@ extension UIColor {
         )
     }
 
+    
     // Ниже приведены примеры цветов, настоящие цвета надо взять из фигмы
-
+    static var blueUniversal: UIColor { #colorLiteral(red: 0.03921568627, green: 0.5176470588, blue: 1, alpha: 1) }
+    static var lightGrayDay: UIColor { #colorLiteral(red: 0.968627451, green: 0.968627451, blue: 0.9725490196, alpha: 1) }
+    static var lightGrayNight: UIColor { #colorLiteral(red: 0.1725490196, green: 0.1725490196, blue: 0.1803921569, alpha: 1) }
+    static var grayUniversal: UIColor { #colorLiteral(red: 0.3843137255, green: 0.3607843137, blue: 0.3607843137, alpha: 1) }
+    
+   
     // Primary Colors
     static let primary = UIColor(red: 0 / 255, green: 122 / 255, blue: 255 / 255, alpha: 1.0)
 
@@ -64,4 +70,37 @@ extension UIColor {
         ? .yaBlackDark
         : .yaBlackLight
     }
+    
+    static var fontColor: UIColor {
+        return UIColor { traitCollection in
+            return traitCollection.userInterfaceStyle == .dark ?
+                .white   :  // Цвет для тёмной темы
+                .black // Цвет для светлой темы
+        }
+    }
+    
+    static var buttonColor: UIColor {
+        return UIColor { traitCollection in
+            return traitCollection.userInterfaceStyle == .dark ?
+                .white   :  // Цвет для тёмной темы
+                .black  // Цвет для светлой темы
+        }
+    }
+    
+    static var backgroudColor: UIColor {
+        return UIColor { traitCollection in
+            return traitCollection.userInterfaceStyle == .dark ?
+                .black   :  // Цвет для тёмной темы
+                .white // Цвет для светлой темы
+        }
+    }
+    
+    static var greyColor: UIColor {
+        return UIColor { traitCollection in
+            return traitCollection.userInterfaceStyle == .dark ?
+                .lightGrayNight   :  // Цвет для тёмной темы
+                .lightGrayDay  // Цвет для светлой темы
+        }
+    }
 }
+
