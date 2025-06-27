@@ -197,3 +197,10 @@
 - экран «Корзина» — по названию;
 - экран «Мои NFT» — по рейтингу;
 - экран «Статистика» — по рейтингу.
+
+
+
+Скринкасты работы приложения:
+1) каталог - https://disk.yandex.ru/i/Ola4nAe5llev0w
+2) корзина - https://disk.yandex.ru/i/MPJD05H5Nmm2fA
+3) профиль - https://disk.yandex.ru/i/sdDTOh9MzXkukA
